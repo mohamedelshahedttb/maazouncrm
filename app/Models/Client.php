@@ -139,6 +139,44 @@ class Client extends Model implements HasMedia
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('documents')
-            ->acceptsMimeTypes(['application/pdf', 'image/jpeg', 'image/png', 'image/jpg']);
+            ->acceptsMimeTypes([
+                'application/pdf',
+                'application/msword',
+                'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                'image/jpeg',
+                'image/png',
+                'image/jpg'
+            ]);
+    }
+
+    // Custom accessor for media URLs
+    public function getMediaUrlsAttribute()
+    {
+        return $this->media->map(function ($media) {
+            return [
+                'id' => $media->id,
+                'name' => $media->name,
+                'file_name' => $media->file_name,
+                'mime_type' => $media->mime_type,
+                'size' => $media->size,
+                'url' => $media->getUrl(),
+                'download_url' => $media->getUrl(),
+                'created_at' => $media->created_at
+            ];
+        });
+    }
+
+    // Custom method to get correct media URLs
+    public function getCorrectMediaUrl($media)
+    {
+        // Pass id and filename as separate parameters to match the route
+        return route('files.serve', ['id' => $media->id, 'filename' => $media->file_name]);
+    }
+
+    // Custom method to get download URLs
+    public function getCorrectMediaDownloadUrl($media)
+    {
+        // Pass id and filename as separate parameters to match the route
+        return route('files.download', ['id' => $media->id, 'filename' => $media->file_name]);
     }
 }

@@ -5,7 +5,7 @@
     <!-- Page Title and Actions -->
     <div class="flex justify-between items-center mb-8">
         <div>
-            <h1 class="text-3xl font-bold text-gray-800">إدارة المهام</h1>
+            <h1 class="text-3xl font-bold text-blue-800">إدارة المهام</h1>
             <p class="text-gray-600 mt-2">إدارة المهام والعمليات اليومية</p>
         </div>
         <a href="{{ route('tasks.create') }}" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-medium flex items-center">
@@ -44,7 +44,7 @@
     <!-- Tasks List -->
     <div class="bg-white rounded-lg shadow-sm border border-gray-200">
         <div class="px-6 py-4 border-b border-gray-200">
-            <h3 class="text-lg font-semibold text-gray-800">قائمة المهام</h3>
+            <h3 class="text-lg font-semibold text-blue-800">قائمة المهام</h3>
         </div>
         
         <div class="overflow-x-auto">
@@ -131,8 +131,8 @@
                     @empty
                     <tr>
                         <td colspan="7" class="px-6 py-12 text-center">
-                            <div class="text-gray-500">
-                                <svg class="w-16 h-16 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div class="text-blue-500">
+                                <svg class="w-16 h-16 mx-auto mb-4 text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
                                 </svg>
                                 <p class="text-lg font-medium">لا توجد مهام</p>

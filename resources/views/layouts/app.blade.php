@@ -17,9 +17,9 @@
 <body class="font-sans antialiased bg-blue-50">
     <div class="min-h-screen flex">
         <!-- Left Sidebar -->
-        <div class="w-64 bg-blue-50 shadow-lg border-l border-blue-200">
+        <div class="w-64 bg-blue-50 shadow-lg border-l border-blue-200 flex flex-col">
             <!-- Logo -->
-            <div class="p-6 border-b border-blue-200">
+            <div class="p-6 border-b border-blue-200 flex-shrink-0">
                 <div class="flex items-center">
                     <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center mr-3">
                         <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -31,8 +31,8 @@
             </div>
 
             <!-- Navigation Menu -->
-            <nav class="mt-8">
-                <div class="px-6 space-y-4">
+            <nav class="flex-1 overflow-y-auto">
+                <div class="px-6 space-y-4 py-4">
                     <!-- Dashboard -->
                     <div class="mb-6">
                         <h3 class="text-xs font-semibold text-blue-500 uppercase tracking-wider mb-3 px-3">القائمة الرئيسية</h3>
@@ -159,7 +159,7 @@
             </nav>
 
             <!-- User Profile Section -->
-            <div class="absolute bottom-0 left-0 right-0 p-4 border-t border-blue-200">
+            <div class="p-4 border-t border-blue-200 flex-shrink-0 bg-blue-50">
                 <div class="flex items-center">
                     <div class="w-8 h-8 bg-blue-200 rounded-full flex items-center justify-center mr-3">
                         <span class="text-blue-700 font-semibold text-sm">{{ strtoupper(substr(auth()->user()->name, 0, 1)) }}</span>
@@ -181,9 +181,9 @@
         </div>
 
         <!-- Main Content Area -->
-        <div class="flex-1 flex flex-col">
+        <div class="flex-1 flex flex-col min-h-screen">
             <!-- Page Content -->
-            <main class="flex-1 overflow-y-auto bg-blue-50">
+            <main class="flex-1 overflow-y-auto bg-blue-50 p-6">
                 @yield('content')
             </main>
         </div>

@@ -19,6 +19,7 @@ class Appointment extends Model
         'primary_partner_id',
         'appointment_date',
         'end_time',
+        'duration',
         'execution_status',
         'execution_started_at',
         'execution_completed_at',
@@ -34,6 +35,7 @@ class Appointment extends Model
     protected $casts = [
         'appointment_date' => 'datetime',
         'end_time' => 'datetime',
+        'duration' => 'integer',
         'execution_started_at' => 'datetime',
         'execution_completed_at' => 'datetime',
         'whatsapp_reminder_sent' => 'boolean',

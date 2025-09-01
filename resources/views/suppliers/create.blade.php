@@ -67,18 +67,13 @@
 
                 <!-- Right Column -->
                 <div class="space-y-6">
-                    <!-- Service Type -->
+                    <!-- Services/Products -->
                     <div>
-                        <label for="service_type" class="block text-sm font-medium text-gray-700 mb-2">نوع الخدمات *</label>
-                        <select name="service_type" id="service_type" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                            <option value="">اختر نوع الخدمة</option>
-                            <option value="دفاتر عقود" {{ old('service_type') == 'دفاتر عقود' ? 'selected' : '' }}>دفاتر عقود</option>
-                            <option value="طابعات" {{ old('service_type') == 'طابعات' ? 'selected' : '' }}>طابعات</option>
-                            <option value="مستندات رسمية" {{ old('service_type') == 'مستندات رسمية' ? 'selected' : '' }}>مستندات رسمية</option>
-                            <option value="أدوات مكتبية" {{ old('service_type') == 'أدوات مكتبية' ? 'selected' : '' }}>أدوات مكتبية</option>
-                            <option value="أخرى" {{ old('service_type') == 'أخرى' ? 'selected' : '' }}>أخرى</option>
-                        </select>
-                        @error('service_type')
+                        <label for="services_products" class="block text-sm font-medium text-gray-700 mb-2">الخدمات/المنتجات المقدمة *</label>
+                        <textarea name="services_products" id="services_products" rows="3" required
+                                  class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                  placeholder="أدخل الخدمات أو المنتجات التي يقدمها المورد">{{ old('services_products') }}</textarea>
+                        @error('services_products')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
                     </div>
@@ -87,6 +82,7 @@
                     <div>
                         <label for="rating" class="block text-sm font-medium text-gray-700 mb-2">التقييم</label>
                         <select name="rating" id="rating" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            <option value="">اختر التقييم</option>
                             <option value="1" {{ old('rating') == '1' ? 'selected' : '' }}>1 - ضعيف</option>
                             <option value="2" {{ old('rating') == '2' ? 'selected' : '' }}>2 - مقبول</option>
                             <option value="3" {{ old('rating') == '3' ? 'selected' : '' }}>3 - جيد</option>
@@ -105,6 +101,20 @@
                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                   placeholder="أدخل العنوان الكامل">{{ old('address') }}</textarea>
                         @error('address')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Status -->
+                    <div>
+                        <label for="status" class="block text-sm font-medium text-gray-700 mb-2">الحالة *</label>
+                        <select name="status" id="status" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            <option value="">اختر الحالة</option>
+                            <option value="active" {{ old('status', 'active') == 'active' ? 'selected' : '' }}>نشط</option>
+                            <option value="inactive" {{ old('status') == 'inactive' ? 'selected' : '' }}>غير نشط</option>
+                            <option value="suspended" {{ old('status') == 'suspended' ? 'selected' : '' }}>معلق</option>
+                        </select>
+                        @error('status')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
                     </div>

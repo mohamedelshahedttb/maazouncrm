@@ -39,7 +39,39 @@ Route::delete('clients/{client}/documents/{document}', [ClientController::class,
 Route::get('clients/{client}/appointments/create', [ClientController::class, 'createAppointment'])->name('clients.appointments.create');
 Route::post('clients/{client}/appointments', [ClientController::class, 'storeAppointment'])->name('clients.appointments.store');
 
-// Users Management
+    // Custom media serving route to avoid permission issues
+    Route::get('media/{media}/serve', function (\Spatie\MediaLibrary\MediaCollections\Models\Media $media) {
+        $path = storage_path('app/public/' . $media->getPath());
+        
+        if (!file_exists($path)) {
+            abort(404, 'File not found');
+        }
+        
+        $mimeType = mime_content_type($path);
+        $fileName = $media->file_name;
+        
+        return response()->file($path, [
+            'Content-Type' => $mimeType,
+            'Content-Disposition' => 'inline; filename="' . $fileName . '"'
+        ]);
+    })->name('media.serve');
+
+    Route::get('media/{media}/download', function (\Spatie\MediaLibrary\MediaCollections\Models\Media $media) {
+        $path = storage_path('app/public/' . $media->getPath());
+        
+        if (!file_exists($path)) {
+            abort(404, 'File not found');
+        }
+        
+        $mimeType = mime_content_type($path);
+        $fileName = $media->file_name;
+        
+        return response()->download($path, $fileName, [
+            'Content-Type' => $mimeType
+        ]);
+    })->name('media.download');
+
+    // Users Management
 Route::resource('users', UserController::class);
 Route::post('users/{user}/toggle-status', [UserController::class, 'toggleStatus'])->name('users.toggle-status');
 Route::post('users/{user}/change-password', [UserController::class, 'changePassword'])->name('users.change-password');
@@ -51,8 +83,8 @@ Route::post('users/{user}/change-password', [UserController::class, 'changePassw
     Route::resource('client-sources', ClientSourceController::class);
 
     // Appointments & Scheduling
-    Route::resource('appointments', AppointmentController::class);
     Route::get('appointments/calendar', [AppointmentController::class, 'calendar'])->name('appointments.calendar');
+    Route::resource('appointments', AppointmentController::class);
     Route::post('appointments/{appointment}/confirm', [AppointmentController::class, 'confirm'])->name('appointments.confirm');
     Route::post('appointments/{appointment}/cancel', [AppointmentController::class, 'cancel'])->name('appointments.cancel');
 
@@ -129,5 +161,40 @@ Route::post('users/{user}/change-password', [UserController::class, 'changePassw
     });
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+// Simple test route
+Route::get('test/hello', function() {
+    return 'Hello World!';
+});
+
+// Simple file serving routes
+Route::get('files/{id}/{filename}', function ($id, $filename) {
+    $path = storage_path('app/public/' . $id . '/' . $filename);
+    
+    if (!file_exists($path)) {
+        abort(404, 'File not found: ' . $path);
+    }
+    
+    $mimeType = mime_content_type($path);
+    
+    return response()->file($path, [
+        'Content-Type' => $mimeType,
+        'Content-Disposition' => 'inline; filename="' . $filename . '"'
+    ]);
+})->name('files.serve');
+
+Route::get('files/{id}/{filename}/download', function ($id, $filename) {
+    $path = storage_path('app/public/' . $id . '/' . $filename);
+    
+    if (!file_exists($path)) {
+        abort(404, 'File not found: ' . $path);
+    }
+    
+    $mimeType = mime_content_type($path);
+    
+    return response()->download($path, $filename, [
+        'Content-Type' => $mimeType
+    ]);
+})->name('files.download');
 
 require __DIR__.'/auth.php';

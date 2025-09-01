@@ -235,8 +235,9 @@ class ClientController extends Controller
         $appointmentDateTime = $validated['appointment_date'] . ' ' . $validated['appointment_time'];
         $startDateTime = \Carbon\Carbon::parse($appointmentDateTime);
         
-        // Calculate end time based on duration
-        $endDateTime = $startDateTime->copy()->addMinutes($validated['duration']);
+        // Calculate end time based on duration (ensure it's an integer)
+        $duration = (int) $validated['duration'];
+        $endDateTime = $startDateTime->copy()->addMinutes($duration);
         
         // Check for conflicts
         $conflicts = Appointment::where('status', '!=', 'cancelled')
@@ -259,6 +260,7 @@ class ClientController extends Controller
             'service_id' => $validated['service_id'],
             'appointment_date' => $startDateTime,
             'end_time' => $endDateTime,
+            'duration' => $duration,
             'location' => $validated['location'],
             'notes' => $validated['notes'],
             'assigned_to' => auth()->id(),
