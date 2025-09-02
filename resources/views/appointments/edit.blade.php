@@ -69,6 +69,22 @@
                         @endforeach
                     </select>
                 </div>
+
+                <div>
+                    <label for="location" class="block text-sm font-medium text-gray-700 mb-2">الموقع</label>
+                    <input type="text" name="location" id="location" 
+                           value="{{ old('location', $appointment->location) }}"
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                           placeholder="أدخل موقع الموعد">
+                </div>
+            </div>
+
+            <!-- Notes Section -->
+            <div class="mt-6">
+                <label for="notes" class="block text-sm font-medium text-gray-700 mb-2">ملاحظات</label>
+                <textarea name="notes" id="notes" rows="4"
+                          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          placeholder="أدخل أي ملاحظات أو تفاصيل إضافية">{{ old('notes', $appointment->notes) }}</textarea>
             </div>
 
             <div class="flex justify-end space-x-3 space-x-reverse mt-8 pt-6 border-t border-gray-200">
