@@ -26,6 +26,7 @@ class Task extends Model implements HasMedia
         'execution_phase',
         'priority',
         'status',
+        'tag',
         'due_date',
         'started_at',
         'completed_at',

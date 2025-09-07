@@ -35,9 +35,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('clients/{client}/orders', [ClientController::class, 'orders'])->name('clients.orders');
     Route::get('clients-kanban', [ClientController::class, 'kanban'])->name('clients.kanban');
     Route::post('clients/{client}/documents', [ClientController::class, 'storeDocuments'])->name('clients.documents.store');
-Route::delete('clients/{client}/documents/{document}', [ClientController::class, 'destroyDocument'])->name('clients.documents.destroy');
-Route::get('clients/{client}/appointments/create', [ClientController::class, 'createAppointment'])->name('clients.appointments.create');
-Route::post('clients/{client}/appointments', [ClientController::class, 'storeAppointment'])->name('clients.appointments.store');
+    Route::delete('clients/{client}/documents/{document}', [ClientController::class, 'destroyDocument'])->name('clients.documents.destroy');
+    Route::get('clients/{client}/appointments/create', [ClientController::class, 'createAppointment'])->name('clients.appointments.create');
+    Route::post('clients/{client}/appointments', [ClientController::class, 'storeAppointment'])->name('clients.appointments.store');
+    Route::post('clients/{client}/transfer-to-operations', [ClientController::class, 'transferToOperations'])->name('clients.transfer-to-operations');
 
     // Custom media serving route to avoid permission issues
     Route::get('media/{media}/serve', function (\Spatie\MediaLibrary\MediaCollections\Models\Media $media) {

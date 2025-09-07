@@ -31,6 +31,61 @@
                         @enderror
                     </div>
 
+                    <!-- Office Name -->
+                    <div>
+                        <label for="office_name" class="block text-sm font-medium text-gray-700 mb-2">اسم المكتب</label>
+                        <input type="text" name="office_name" id="office_name" value="{{ old('office_name') }}"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                               placeholder="أدخل اسم المكتب">
+                        @error('office_name')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Office Address -->
+                    <div>
+                        <label for="office_address" class="block text-sm font-medium text-gray-700 mb-2">عنوان المكتب</label>
+                        <textarea name="office_address" id="office_address" rows="3"
+                                  class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                  placeholder="أدخل عنوان المكتب">{{ old('office_address') }}</textarea>
+                        @error('office_address')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Agent Name -->
+                    <div>
+                        <label for="agent_name" class="block text-sm font-medium text-gray-700 mb-2">الوكيل من المأذون</label>
+                        <input type="text" name="agent_name" id="agent_name" value="{{ old('agent_name') }}"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                               placeholder="أدخل اسم الوكيل">
+                        @error('agent_name')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Agent Phone -->
+                    <div>
+                        <label for="agent_phone" class="block text-sm font-medium text-gray-700 mb-2">رقم هاتف الوكيل</label>
+                        <input type="tel" name="agent_phone" id="agent_phone" value="{{ old('agent_phone') }}"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                               placeholder="مثل: 05XXXXXXXXX">
+                        @error('agent_phone')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Agent Email -->
+                    <div>
+                        <label for="agent_email" class="block text-sm font-medium text-gray-700 mb-2">بريد الوكيل الإلكتروني</label>
+                        <input type="email" name="agent_email" id="agent_email" value="{{ old('agent_email') }}"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                               placeholder="مثل: agent@example.com">
+                        @error('agent_email')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
                     <!-- License Number -->
                     <div>
                         <label for="license_number" class="block text-sm font-medium text-gray-700 mb-2">رقم الترخيص *</label>
@@ -101,6 +156,39 @@
                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                   placeholder="أدخل العنوان الكامل">{{ old('address') }}</textarea>
                         @error('address')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Location Number -->
+                    <div>
+                        <label for="location_number" class="block text-sm font-medium text-gray-700 mb-2">موقع</label>
+                        <input type="text" name="location_number" id="location_number" value="{{ old('location_number') }}"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                               placeholder="أدخل رقم الموقع">
+                        @error('location_number')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Book Number -->
+                    <div>
+                        <label for="book_number" class="block text-sm font-medium text-gray-700 mb-2">رقم الدفتر</label>
+                        <input type="text" name="book_number" id="book_number" value="{{ old('book_number') }}"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                               placeholder="أدخل رقم الدفتر">
+                        @error('book_number')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Document Number -->
+                    <div>
+                        <label for="document_number" class="block text-sm font-medium text-gray-700 mb-2">رقم الوثيقه</label>
+                        <input type="text" name="document_number" id="document_number" value="{{ old('document_number') }}"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                               placeholder="أدخل رقم الوثيقه">
+                        @error('document_number')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
                     </div>

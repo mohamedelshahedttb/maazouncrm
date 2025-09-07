@@ -40,7 +40,14 @@ class ClientController extends Controller
             'phone' => 'required|string|max:20',
             'email' => 'nullable|email|max:255',
             'address' => 'nullable|string|max:500',
+            'geographical_area' => 'nullable|string|max:255',
             'status' => 'required|in:new,in_progress,completed,cancelled',
+            'call_result' => 'nullable|in:interested,not_interested,follow_up_later,potential_client,confirmed_booking,completed_booking,cancelled,inquiry,client_booking,no_answer,busy_number',
+            'next_follow_up_date' => 'nullable|date|after_or_equal:today',
+            'relationship_status' => 'nullable|string|max:255',
+            'google_maps_link' => 'nullable|url|max:500',
+            'governorate' => 'nullable|string|max:255',
+            'area' => 'nullable|string|max:255',
             'notes' => 'nullable|string|max:1000',
             'whatsapp_number' => 'nullable|string|max:20',
             'is_active' => 'boolean',
@@ -94,7 +101,14 @@ class ClientController extends Controller
             'phone' => 'required|string|max:20',
             'email' => 'nullable|email|max:255',
             'address' => 'nullable|string|max:500',
+            'geographical_area' => 'nullable|string|max:255',
             'status' => 'required|in:new,in_progress,completed,cancelled',
+            'call_result' => 'nullable|in:interested,not_interested,follow_up_later,potential_client,confirmed_booking,completed_booking,cancelled,inquiry,client_booking,no_answer,busy_number',
+            'next_follow_up_date' => 'nullable|date|after_or_equal:today',
+            'relationship_status' => 'nullable|string|max:255',
+            'google_maps_link' => 'nullable|url|max:500',
+            'governorate' => 'nullable|string|max:255',
+            'area' => 'nullable|string|max:255',
             'notes' => 'nullable|string|max:1000',
             'whatsapp_number' => 'nullable|string|max:20',
             'is_active' => 'boolean',
@@ -275,5 +289,93 @@ class ClientController extends Controller
 
         return redirect()->route('clients.show', $client)
             ->with('success', 'تم إنشاء الموعد وتحديث خدمة العميل بنجاح');
+    }
+
+    public function transferToOperations(Client $client)
+    {
+        // Create a new task for operations
+        $task = \App\Models\Task::create([
+            'title' => 'مهمة جديدة - ' . $client->name,
+            'description' => $this->generateTaskDescription($client),
+            'priority' => 'medium',
+            'status' => 'pending',
+            'tag' => 'new',
+            'due_date' => now()->addDays(3), // Due in 3 days
+            'location' => $client->address,
+            'execution_phase' => 'preparation',
+            'is_active' => true,
+            'assigned_to' => auth()->id(),
+        ]);
+
+        // Update client status to indicate it's been transferred to operations
+        $client->update([
+            'status' => 'in_progress',
+            'document_status' => 'under_review'
+        ]);
+
+        return redirect()->route('clients.show', $client)
+            ->with('success', 'تم تحويل العميل إلى التشغيل بنجاح. تم إنشاء مهمة جديدة برقم: ' . $task->id);
+    }
+
+    private function generateTaskDescription(Client $client): string
+    {
+        $description = "تفاصيل العميل:\n";
+        $description .= "الاسم: " . $client->name . "\n";
+        
+        if ($client->bride_name) {
+            $description .= "اسم العروس: " . $client->bride_name . "\n";
+        }
+        
+        if ($client->guardian_name) {
+            $description .= "ولي الأمر: " . $client->guardian_name . "\n";
+        }
+        
+        $description .= "رقم الهاتف: " . $client->phone . "\n";
+        
+        if ($client->email) {
+            $description .= "البريد الإلكتروني: " . $client->email . "\n";
+        }
+        
+        if ($client->address) {
+            $description .= "العنوان: " . $client->address . "\n";
+        }
+        
+        if ($client->geographical_area) {
+            $description .= "المنطقة الجغرافية: " . $client->geographical_area . "\n";
+        }
+        
+        if ($client->governorate) {
+            $description .= "المحافظة: " . $client->governorate . "\n";
+        }
+        
+        if ($client->area) {
+            $description .= "المنطقة: " . $client->area . "\n";
+        }
+        
+        if ($client->google_maps_link) {
+            $description .= "رابط الموقع: " . $client->google_maps_link . "\n";
+        }
+        
+        if ($client->relationship_status) {
+            $description .= "صلة القرابة: " . $client->relationship_status . "\n";
+        }
+        
+        if ($client->call_result) {
+            $description .= "نتيجة المكالمة: " . $client->getCallResultLabelAttribute() . "\n";
+        }
+        
+        if ($client->next_follow_up_date) {
+            $description .= "تاريخ المتابعة: " . $client->next_follow_up_date->format('Y-m-d') . "\n";
+        }
+        
+        if ($client->service) {
+            $description .= "الخدمة: " . $client->service->name . "\n";
+        }
+        
+        if ($client->notes) {
+            $description .= "الملاحظات: " . $client->notes . "\n";
+        }
+
+        return $description;
     }
 }

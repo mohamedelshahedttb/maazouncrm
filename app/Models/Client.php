@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\MediaLibrary\HasMedia;
@@ -12,7 +13,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 
 class Client extends Model implements HasMedia
 {
-    use LogsActivity, InteractsWithMedia;
+    use HasFactory, LogsActivity, InteractsWithMedia;
 
     protected $fillable = [
         'name',
@@ -21,7 +22,23 @@ class Client extends Model implements HasMedia
         'phone',
         'email',
         'address',
+        'geographical_area',
         'status',
+        'call_result',
+        'next_follow_up_date',
+        'relationship_status',
+        'google_maps_link',
+        'governorate',
+        'area',
+        'document_status',
+        'document_rejection_reason',
+        'assigned_partner_id',
+        'job_date',
+        'job_time',
+        'job_number',
+        'coupon_number',
+        'final_document_delivery_date',
+        'final_document_notification_sent',
         'notes',
         'whatsapp_number',
         'facebook_id',
@@ -33,6 +50,10 @@ class Client extends Model implements HasMedia
 
     protected $casts = [
         'is_active' => 'boolean',
+        'next_follow_up_date' => 'date',
+        'job_date' => 'date',
+        'final_document_delivery_date' => 'date',
+        'final_document_notification_sent' => 'boolean',
     ];
 
     // Status constants
@@ -40,6 +61,26 @@ class Client extends Model implements HasMedia
     const STATUS_IN_PROGRESS = 'in_progress';
     const STATUS_COMPLETED = 'completed';
     const STATUS_CANCELLED = 'cancelled';
+    
+    // Call result constants
+    const CALL_RESULT_INTERESTED = 'interested';
+    const CALL_RESULT_NOT_INTERESTED = 'not_interested';
+    const CALL_RESULT_FOLLOW_UP_LATER = 'follow_up_later';
+    const CALL_RESULT_POTENTIAL_CLIENT = 'potential_client';
+    const CALL_RESULT_CONFIRMED_BOOKING = 'confirmed_booking';
+    const CALL_RESULT_COMPLETED_BOOKING = 'completed_booking';
+    const CALL_RESULT_CANCELLED = 'cancelled';
+    const CALL_RESULT_INQUIRY = 'inquiry';
+    const CALL_RESULT_CLIENT_BOOKING = 'client_booking';
+    const CALL_RESULT_NO_ANSWER = 'no_answer';
+    const CALL_RESULT_BUSY_NUMBER = 'busy_number';
+    
+    // Document status constants
+    const DOCUMENT_STATUS_PENDING = 'pending';
+    const DOCUMENT_STATUS_UNDER_REVIEW = 'under_review';
+    const DOCUMENT_STATUS_APPROVED = 'approved';
+    const DOCUMENT_STATUS_REJECTED = 'rejected';
+    const DOCUMENT_STATUS_INCOMPLETE = 'incomplete';
 
     // Relationships
     public function service(): BelongsTo
@@ -72,6 +113,11 @@ class Client extends Model implements HasMedia
         return $this->hasMany(Conversation::class);
     }
 
+    public function assignedPartner(): BelongsTo
+    {
+        return $this->belongsTo(Partner::class, 'assigned_partner_id');
+    }
+
     // Scopes
     public function scopeActive($query)
     {
@@ -102,6 +148,66 @@ class Client extends Model implements HasMedia
             self::STATUS_IN_PROGRESS => 'yellow',
             self::STATUS_COMPLETED => 'green',
             self::STATUS_CANCELLED => 'red',
+            default => 'gray'
+        };
+    }
+
+    public function getCallResultLabelAttribute(): string
+    {
+        return match($this->call_result) {
+            self::CALL_RESULT_INTERESTED => 'مهتم',
+            self::CALL_RESULT_NOT_INTERESTED => 'غير مهتم',
+            self::CALL_RESULT_FOLLOW_UP_LATER => 'متابعة لاحقا',
+            self::CALL_RESULT_POTENTIAL_CLIENT => 'عميل محتمل',
+            self::CALL_RESULT_CONFIRMED_BOOKING => 'حجز مؤكد',
+            self::CALL_RESULT_COMPLETED_BOOKING => 'حجز مكتمل',
+            self::CALL_RESULT_CANCELLED => 'ملغي',
+            self::CALL_RESULT_INQUIRY => 'استفسار',
+            self::CALL_RESULT_CLIENT_BOOKING => 'حجز العميل',
+            self::CALL_RESULT_NO_ANSWER => 'لم يتم الرد',
+            self::CALL_RESULT_BUSY_NUMBER => 'الرقم مشغول',
+            default => 'غير محدد'
+        };
+    }
+
+    public function getCallResultColorAttribute(): string
+    {
+        return match($this->call_result) {
+            self::CALL_RESULT_INTERESTED => 'green',
+            self::CALL_RESULT_NOT_INTERESTED => 'red',
+            self::CALL_RESULT_FOLLOW_UP_LATER => 'yellow',
+            self::CALL_RESULT_POTENTIAL_CLIENT => 'blue',
+            self::CALL_RESULT_CONFIRMED_BOOKING => 'purple',
+            self::CALL_RESULT_COMPLETED_BOOKING => 'green',
+            self::CALL_RESULT_CANCELLED => 'red',
+            self::CALL_RESULT_INQUIRY => 'blue',
+            self::CALL_RESULT_CLIENT_BOOKING => 'purple',
+            self::CALL_RESULT_NO_ANSWER => 'gray',
+            self::CALL_RESULT_BUSY_NUMBER => 'orange',
+            default => 'gray'
+        };
+    }
+
+    public function getDocumentStatusLabelAttribute(): string
+    {
+        return match($this->document_status) {
+            self::DOCUMENT_STATUS_PENDING => 'في الانتظار',
+            self::DOCUMENT_STATUS_UNDER_REVIEW => 'قيد المراجعة',
+            self::DOCUMENT_STATUS_APPROVED => 'موافق عليه',
+            self::DOCUMENT_STATUS_REJECTED => 'مرفوض',
+            self::DOCUMENT_STATUS_INCOMPLETE => 'الاوراق غير مكتملة',
+            default => 'غير محدد'
+        };
+    }
+
+    public function getDocumentStatusColorAttribute(): string
+    {
+        return match($this->document_status) {
+            self::DOCUMENT_STATUS_PENDING => 'yellow',
+            self::DOCUMENT_STATUS_UNDER_REVIEW => 'blue',
+            self::DOCUMENT_STATUS_APPROVED => 'green',
+            self::DOCUMENT_STATUS_REJECTED => 'red',
+            self::DOCUMENT_STATUS_INCOMPLETE => 'red',
             default => 'gray'
         };
     }

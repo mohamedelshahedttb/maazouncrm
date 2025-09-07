@@ -70,6 +70,36 @@
                                     <input type="tel" name="whatsapp_number" id="whatsapp_number" value="{{ old('whatsapp_number', $client->whatsapp_number) }}"
                                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                                 </div>
+
+                                <div>
+                                    <label for="geographical_area" class="block text-sm font-medium text-gray-700">المنطقة الجغرافية</label>
+                                    <input type="text" name="geographical_area" id="geographical_area" value="{{ old('geographical_area', $client->geographical_area) }}"
+                                           class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                </div>
+
+                                <div>
+                                    <label for="governorate" class="block text-sm font-medium text-gray-700">المحافظة</label>
+                                    <input type="text" name="governorate" id="governorate" value="{{ old('governorate', $client->governorate) }}"
+                                           class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                </div>
+
+                                <div>
+                                    <label for="area" class="block text-sm font-medium text-gray-700">المنطقة</label>
+                                    <input type="text" name="area" id="area" value="{{ old('area', $client->area) }}"
+                                           class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                </div>
+
+                                <div>
+                                    <label for="google_maps_link" class="block text-sm font-medium text-gray-700">رابط الموقع من خرائط جوجل</label>
+                                    <input type="url" name="google_maps_link" id="google_maps_link" value="{{ old('google_maps_link', $client->google_maps_link) }}"
+                                           class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                </div>
+
+                                <div>
+                                    <label for="relationship_status" class="block text-sm font-medium text-gray-700">صلة القرابة ولي العروسة</label>
+                                    <input type="text" name="relationship_status" id="relationship_status" value="{{ old('relationship_status', $client->relationship_status) }}"
+                                           class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                </div>
                             </div>
                         </div>
 
@@ -101,6 +131,33 @@
                                     <input type="checkbox" name="is_active" id="is_active" value="1" {{ old('is_active', $client->is_active) ? 'checked' : '' }}
                                            class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
                                     <label for="is_active" class="mr-2 block text-sm text-gray-900">نشط</label>
+                                </div>
+                            </div>
+
+                            <!-- Call Result and Follow-up -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label for="call_result" class="block text-sm font-medium text-gray-700">نتيجة المكالمة</label>
+                                    <select name="call_result" id="call_result" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                        <option value="">اختر نتيجة المكالمة</option>
+                                        <option value="interested" {{ old('call_result', $client->call_result) == 'interested' ? 'selected' : '' }}>مهتم</option>
+                                        <option value="not_interested" {{ old('call_result', $client->call_result) == 'not_interested' ? 'selected' : '' }}>غير مهتم</option>
+                                        <option value="follow_up_later" {{ old('call_result', $client->call_result) == 'follow_up_later' ? 'selected' : '' }}>متابعة لاحقا</option>
+                                        <option value="potential_client" {{ old('call_result', $client->call_result) == 'potential_client' ? 'selected' : '' }}>عميل محتمل</option>
+                                        <option value="confirmed_booking" {{ old('call_result', $client->call_result) == 'confirmed_booking' ? 'selected' : '' }}>حجز مؤكد</option>
+                                        <option value="completed_booking" {{ old('call_result', $client->call_result) == 'completed_booking' ? 'selected' : '' }}>حجز مكتمل</option>
+                                        <option value="cancelled" {{ old('call_result', $client->call_result) == 'cancelled' ? 'selected' : '' }}>ملغي</option>
+                                        <option value="inquiry" {{ old('call_result', $client->call_result) == 'inquiry' ? 'selected' : '' }}>استفسار</option>
+                                        <option value="client_booking" {{ old('call_result', $client->call_result) == 'client_booking' ? 'selected' : '' }}>حجز العميل</option>
+                                        <option value="no_answer" {{ old('call_result', $client->call_result) == 'no_answer' ? 'selected' : '' }}>لم يتم الرد</option>
+                                        <option value="busy_number" {{ old('call_result', $client->call_result) == 'busy_number' ? 'selected' : '' }}>الرقم مشغول</option>
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label for="next_follow_up_date" class="block text-sm font-medium text-gray-700">تاريخ المتابعة التالية</label>
+                                    <input type="date" name="next_follow_up_date" id="next_follow_up_date" value="{{ old('next_follow_up_date', $client->next_follow_up_date?->format('Y-m-d')) }}"
+                                           class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                                 </div>
                             </div>
                         </div>

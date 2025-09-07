@@ -22,6 +22,14 @@ class PartnerController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
+            'office_name' => 'nullable|string|max:255',
+            'office_address' => 'nullable|string|max:1000',
+            'agent_name' => 'nullable|string|max:255',
+            'agent_phone' => 'nullable|string|max:20',
+            'agent_email' => 'nullable|email|max:255',
+            'location_number' => 'nullable|string|max:255',
+            'book_number' => 'nullable|string|max:255',
+            'document_number' => 'nullable|string|max:255',
             'license_number' => 'required|string|max:255',
             'service_scope' => 'required|string|max:1000',
             'phone' => 'required|string|max:20',
@@ -53,6 +61,14 @@ class PartnerController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
+            'office_name' => 'nullable|string|max:255',
+            'office_address' => 'nullable|string|max:1000',
+            'agent_name' => 'nullable|string|max:255',
+            'agent_phone' => 'nullable|string|max:20',
+            'agent_email' => 'nullable|email|max:255',
+            'location_number' => 'nullable|string|max:255',
+            'book_number' => 'nullable|string|max:255',
+            'document_number' => 'nullable|string|max:255',
             'license_number' => 'required|string|max:255',
             'service_scope' => 'required|string|max:1000',
             'phone' => 'required|string|max:20',

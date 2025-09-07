@@ -286,6 +286,13 @@
                         <a href="{{ route('invoices.create', ['client_id' => $client->id]) }}" class="bg-green-600 hover:bg-green-700 text-blue-100 font-bold py-2 px-4 rounded">
                             إنشاء فاتورة
                         </a>
+                        <form action="{{ route('clients.transfer-to-operations', $client) }}" method="POST" class="inline">
+                            @csrf
+                            <button type="submit" class="bg-orange-600 hover:bg-orange-700 text-blue-100 font-bold py-2 px-4 rounded" 
+                                    onclick="return confirm('هل أنت متأكد من تحويل هذا العميل إلى التشغيل؟')">
+                                تحويل الى التشغيل
+                            </button>
+                        </form>
                         <button class="bg-yellow-600 hover:bg-yellow-700 text-blue-100 font-bold py-2 px-4 rounded">
                             إرسال تذكير واتساب
                         </button>

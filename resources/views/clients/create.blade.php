@@ -100,6 +100,61 @@
                         @enderror
                     </div>
 
+                    <!-- Geographical Area -->
+                    <div>
+                        <label for="geographical_area" class="block text-sm font-medium text-gray-700 mb-2">المنطقة الجغرافية</label>
+                        <input type="text" name="geographical_area" id="geographical_area" value="{{ old('geographical_area') }}"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                               placeholder="أدخل المنطقة الجغرافية">
+                        @error('geographical_area')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Governorate -->
+                    <div>
+                        <label for="governorate" class="block text-sm font-medium text-gray-700 mb-2">المحافظة</label>
+                        <input type="text" name="governorate" id="governorate" value="{{ old('governorate') }}"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                               placeholder="أدخل المحافظة">
+                        @error('governorate')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Area -->
+                    <div>
+                        <label for="area" class="block text-sm font-medium text-gray-700 mb-2">المنطقة</label>
+                        <input type="text" name="area" id="area" value="{{ old('area') }}"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                               placeholder="أدخل المنطقة">
+                        @error('area')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Google Maps Link -->
+                    <div>
+                        <label for="google_maps_link" class="block text-sm font-medium text-gray-700 mb-2">رابط الموقع من خرائط جوجل</label>
+                        <input type="url" name="google_maps_link" id="google_maps_link" value="{{ old('google_maps_link') }}"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                               placeholder="https://maps.google.com/...">
+                        @error('google_maps_link')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Relationship Status -->
+                    <div>
+                        <label for="relationship_status" class="block text-sm font-medium text-gray-700 mb-2">صلة القرابة ولي العروسة</label>
+                        <input type="text" name="relationship_status" id="relationship_status" value="{{ old('relationship_status') }}"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                               placeholder="مثل: والد، أخ، عم، خال">
+                        @error('relationship_status')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
                     <!-- Status -->
                     <div>
                         <label for="status" class="block text-sm font-medium text-gray-700 mb-2">حالة العميل</label>
@@ -110,6 +165,38 @@
                             <option value="cancelled" {{ old('status') == 'cancelled' ? 'selected' : '' }}>ملغى</option>
                         </select>
                         @error('status')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Call Result -->
+                    <div>
+                        <label for="call_result" class="block text-sm font-medium text-gray-700 mb-2">نتيجة المكالمة</label>
+                        <select name="call_result" id="call_result" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            <option value="">اختر نتيجة المكالمة</option>
+                            <option value="interested" {{ old('call_result') == 'interested' ? 'selected' : '' }}>مهتم</option>
+                            <option value="not_interested" {{ old('call_result') == 'not_interested' ? 'selected' : '' }}>غير مهتم</option>
+                            <option value="follow_up_later" {{ old('call_result') == 'follow_up_later' ? 'selected' : '' }}>متابعة لاحقا</option>
+                            <option value="potential_client" {{ old('call_result') == 'potential_client' ? 'selected' : '' }}>عميل محتمل</option>
+                            <option value="confirmed_booking" {{ old('call_result') == 'confirmed_booking' ? 'selected' : '' }}>حجز مؤكد</option>
+                            <option value="completed_booking" {{ old('call_result') == 'completed_booking' ? 'selected' : '' }}>حجز مكتمل</option>
+                            <option value="cancelled" {{ old('call_result') == 'cancelled' ? 'selected' : '' }}>ملغي</option>
+                            <option value="inquiry" {{ old('call_result') == 'inquiry' ? 'selected' : '' }}>استفسار</option>
+                            <option value="client_booking" {{ old('call_result') == 'client_booking' ? 'selected' : '' }}>حجز العميل</option>
+                            <option value="no_answer" {{ old('call_result') == 'no_answer' ? 'selected' : '' }}>لم يتم الرد</option>
+                            <option value="busy_number" {{ old('call_result') == 'busy_number' ? 'selected' : '' }}>الرقم مشغول</option>
+                        </select>
+                        @error('call_result')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Next Follow-up Date -->
+                    <div>
+                        <label for="next_follow_up_date" class="block text-sm font-medium text-gray-700 mb-2">تاريخ المتابعة التالية</label>
+                        <input type="date" name="next_follow_up_date" id="next_follow_up_date" value="{{ old('next_follow_up_date') }}"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        @error('next_follow_up_date')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
                     </div>
