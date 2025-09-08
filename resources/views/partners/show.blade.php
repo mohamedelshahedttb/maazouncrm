@@ -5,8 +5,8 @@
     <!-- Page Title and Actions -->
     <div class="flex justify-between items-center mb-8">
         <div>
-            <h1 class="text-3xl font-bold text-gray-800">تفاصيل الشريك</h1>
-            <p class="text-gray-600 mt-2">عرض معلومات الشريك والتفاصيل</p>
+            <h1 class="text-3xl font-bold text-gray-800">تفاصيل الالشيخ</h1>
+            <p class="text-gray-600 mt-2">عرض معلومات الالشيخ والتفاصيل</p>
         </div>
         <div class="flex space-x-3 space-x-reverse">
             <a href="{{ route('partners.edit', $partner) }}" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium flex items-center">
@@ -29,7 +29,7 @@
                 <h3 class="text-lg font-semibold text-gray-800 mb-4">المعلومات الأساسية</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-sm font-medium text-gray-500">اسم الشريك</label>
+                        <label class="block text-sm font-medium text-gray-500">اسم الالشيخ</label>
                         <p class="text-lg font-medium text-gray-900">{{ $partner->name }}</p>
                     </div>
                     <div>
@@ -104,7 +104,7 @@
         <div class="space-y-6">
             <!-- Status Card -->
             <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                <h3 class="text-lg font-semibold text-gray-800 mb-4">حالة الشريك</h3>
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">حالة الالشيخ</h3>
                 <div class="text-center">
                     @if($partner->is_active)
                         <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
@@ -113,7 +113,7 @@
                             </svg>
                         </div>
                         <p class="text-lg font-medium text-green-800">نشط</p>
-                        <p class="text-sm text-gray-600">الشريك متاح للعمل</p>
+                        <p class="text-sm text-gray-600">الالشيخ متاح للعمل</p>
                     @else
                         <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-3">
                             <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -121,7 +121,7 @@
                             </svg>
                         </div>
                         <p class="text-lg font-medium text-red-800">غير نشط</p>
-                        <p class="text-sm text-gray-600">الشريك غير متاح</p>
+                        <p class="text-sm text-gray-600">الالشيخ غير متاح</p>
                     @endif
                 </div>
             </div>

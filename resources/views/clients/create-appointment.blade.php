@@ -56,9 +56,9 @@
 
                 <!-- Staff/Partner Assignment -->
                 <div class="md:col-span-2">
-                    <label for="assigned_to" class="block text-sm font-medium text-blue-700 mb-2">تعيين للموظف/الشريك *</label>
+                    <label for="assigned_to" class="block text-sm font-medium text-blue-700 mb-2">تعيين للموظف/الالشيخ *</label>
                     <select name="assigned_to" id="assigned_to" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                        <option value="">اختر الموظف أو الشريك</option>
+                        <option value="">اختر الموظف أو الالشيخ</option>
                         @foreach($staff as $member)
                             <option value="{{ $member->id }}" {{ old('assigned_to') == $member->id ? 'selected' : '' }}>
                                 {{ $member->name }} ({{ $member->role_label }})

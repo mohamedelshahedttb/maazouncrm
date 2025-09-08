@@ -120,7 +120,7 @@ class ResourceAllocation extends Model
     public function getResourceTypeLabelAttribute(): string
     {
         return match($this->resource_type) {
-            self::TYPE_PARTNER => 'شريك',
+            self::TYPE_PARTNER => 'الشيخ',
             self::TYPE_SUPPLIER => 'مورد',
             self::TYPE_EQUIPMENT => 'معدات',
             self::TYPE_LOCATION => 'موقع',

@@ -4,14 +4,14 @@
 <div class="p-6">
     <!-- Page Title -->
     <div class="mb-8">
-        <h1 class="text-3xl font-bold text-gray-800">تعديل الشريك</h1>
-        <p class="text-gray-600 mt-2">تعديل بيانات الشريك: {{ $partner->name }}</p>
+        <h1 class="text-3xl font-bold text-gray-800">تعديل الالشيخ</h1>
+        <p class="text-gray-600 mt-2">تعديل بيانات الالشيخ: {{ $partner->name }}</p>
     </div>
 
     <!-- Partner Form -->
     <div class="bg-white rounded-lg shadow-sm border border-gray-200">
         <div class="px-6 py-4 border-b border-gray-200">
-            <h3 class="text-lg font-semibold text-gray-800">معلومات الشريك</h3>
+            <h3 class="text-lg font-semibold text-gray-800">معلومات الالشيخ</h3>
         </div>
         
         <form method="POST" action="{{ route('partners.update', $partner) }}" enctype="multipart/form-data" class="p-6">
@@ -23,10 +23,10 @@
                 <div class="space-y-6">
                     <!-- Partner Name -->
                     <div>
-                        <label for="name" class="block text-sm font-medium text-gray-700 mb-2">اسم الشريك *</label>
+                        <label for="name" class="block text-sm font-medium text-gray-700 mb-2">اسم الالشيخ *</label>
                         <input type="text" name="name" id="name" value="{{ old('name', $partner->name) }}" required
                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                               placeholder="أدخل اسم الشريك">
+                               placeholder="أدخل اسم الالشيخ">
                         @error('name')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
@@ -137,7 +137,7 @@
                     إلغاء
                 </a>
                 <button type="submit" class="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 font-medium">
-                    تحديث الشريك
+                    تحديث الالشيخ
                 </button>
             </div>
         </form>

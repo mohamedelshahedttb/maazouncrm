@@ -53,9 +53,9 @@
 
                 <!-- Partner (Optional) -->
                 <div>
-                    <label for="partner_id" class="block text-sm font-medium text-blue-700 mb-2">الشريك (اختياري)</label>
+                    <label for="partner_id" class="block text-sm font-medium text-blue-700 mb-2">الالشيخ (اختياري)</label>
                     <select name="partner_id" id="partner_id" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                        <option value="">بدون شريك</option>
+                        <option value="">بدون الشيخ</option>
                         @foreach($partners as $partner)
                             <option value="{{ $partner->id }}" {{ old('partner_id') == $partner->id ? 'selected' : '' }}>
                                 {{ $partner->name }}
@@ -131,9 +131,21 @@
                     </label>
                 </div>
 
+                <!-- Book Number -->
+                <div>
+                    <label for="book_number" class="block text-sm font-medium text-blue-700 mb-2">رقم الدفتر</label>
+                    <input type="text" name="book_number" id="book_number" 
+                           value="{{ old('book_number') }}"
+                           placeholder="رقم الدفتر"
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    @error('book_number')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+
                 <!-- Notes -->
                 <div class="md:col-span-2">
-                    <label for="notes" class="block text-sm font-medium text-blue
+                    <label for="notes" class="block text-sm font-medium text-blue-700 mb-2">ملاحظات</label>
                     <textarea name="notes" id="notes" rows="3" 
                               placeholder="أي ملاحظات إضافية حول المهمة..."
                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">{{ old('notes') }}</textarea>

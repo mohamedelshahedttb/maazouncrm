@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('partner_assistance_requests', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('requesting_partner_id')->constrained('partners')->onDelete('cascade'); // الشريك الطالب
-            $table->foreignId('assisting_partner_id')->constrained('partners')->onDelete('cascade'); // الشريك المساعد
+            $table->foreignId('requesting_partner_id')->constrained('partners')->onDelete('cascade'); // الالشيخ الطالب
+            $table->foreignId('assisting_partner_id')->constrained('partners')->onDelete('cascade'); // الالشيخ المساعد
             $table->string('service_type'); // نوع الخدمة المطلوبة
             $table->dateTime('requested_date_time'); // التاريخ والوقت المطلوب
             $table->string('location'); // الموقع

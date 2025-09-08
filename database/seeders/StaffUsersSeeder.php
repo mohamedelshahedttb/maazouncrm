@@ -68,7 +68,7 @@ class StaffUsersSeeder extends Seeder
             'role' => 'partner',
             'is_active' => true,
             'specialization' => 'محامي متخصص',
-            'notes' => 'شريك محامي متخصص في القانون العائلي'
+            'notes' => 'الشيخ محامي متخصص في القانون العائلي'
         ]);
 
         User::create([
@@ -79,7 +79,7 @@ class StaffUsersSeeder extends Seeder
             'role' => 'partner',
             'is_active' => true,
             'specialization' => 'مستشارة أسرية',
-            'notes' => 'شريكة مستشارة أسرية متخصصة'
+            'notes' => 'الشيخة مستشارة أسرية متخصصة'
         ]);
 
         $this->command->info('تم إنشاء المستخدمين بنجاح!');

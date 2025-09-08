@@ -17,7 +17,7 @@ return new class extends Migration
             $table->text('description')->nullable(); // وصف المهمة
             $table->foreignId('appointment_id')->nullable()->constrained()->onDelete('cascade'); // الموعد المرتبط
             $table->foreignId('assigned_to')->nullable()->constrained('users')->onDelete('set null'); // المسؤول عن المهمة
-            $table->foreignId('partner_id')->nullable()->constrained()->onDelete('set null'); // الشريك المسؤول
+            $table->foreignId('partner_id')->nullable()->constrained()->onDelete('set null'); // الالشيخ المسؤول
             $table->enum('priority', ['low', 'medium', 'high', 'urgent'])->default('medium'); // الأولوية
             $table->enum('status', ['pending', 'in_progress', 'completed', 'cancelled', 'delayed'])->default('pending'); // الحالة
             $table->dateTime('due_date')->nullable(); // تاريخ الاستحقاق

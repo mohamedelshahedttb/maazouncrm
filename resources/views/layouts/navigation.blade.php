@@ -49,14 +49,14 @@
                     <!-- Partners -->
                     <div class="relative" x-data="{ open: false }">
                         <button @click="open = !open" class="inline-flex items-center px-3 py-2 border-b-2 border-transparent text-sm font-medium leading-5 text-gray-700 hover:text-blue-600 hover:border-blue-300 focus:outline-none focus:text-blue-600 focus:border-blue-300 transition duration-150 ease-in-out">
-                            {{ __('الشركاء') }}
+                            {{ __('الشيوخ') }}
                             <svg class="ml-2 -mr-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
                             </svg>
                         </button>
                         <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50 border border-gray-200">
-                            <a href="{{ route('partners.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600">🤝 قائمة الشركاء</a>
-                            <a href="{{ route('partners.create') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600">➕ إضافة شريك جديد</a>
+                            <a href="{{ route('partners.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600">🤝 قائمة الشيوخ</a>
+                            <a href="{{ route('partners.create') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600">➕ إضافة الشيخ جديد</a>
                             <a href="{{ route('partner-assistance-requests.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600">📋 طلبات المساعدة</a>
                         </div>
                     </div>
@@ -193,7 +193,7 @@
                 <div class="px-2 space-y-1">
                     <a href="{{ route('clients.index') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50">👥 إدارة العملاء</a>
                     <a href="{{ route('appointments.index') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50">📅 المواعيد</a>
-                    <a href="{{ route('partners.index') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50">🤝 الشركاء</a>
+                    <a href="{{ route('partners.index') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50">🤝 الشيوخ</a>
                     <a href="{{ route('suppliers.index') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50">🏢 الموردين</a>
                     <a href="{{ route('tasks.index') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50">✅ المهام</a>
                     <a href="{{ route('products.index') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50">📦 المنتجات</a>

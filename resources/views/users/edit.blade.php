@@ -55,7 +55,7 @@
                         <option value="">اختر الدور</option>
                         <option value="admin" {{ old('role', $user->role) == 'admin' ? 'selected' : '' }}>مدير</option>
                         <option value="staff" {{ old('role', $user->role) == 'staff' ? 'selected' : '' }}>موظف</option>
-                        <option value="partner" {{ old('role', $user->role) == 'partner' ? 'selected' : '' }}>شريك</option>
+                        <option value="partner" {{ old('role', $user->role) == 'partner' ? 'selected' : '' }}>الشيخ</option>
                     </select>
                     @error('role')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>

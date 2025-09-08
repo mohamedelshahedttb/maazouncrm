@@ -52,7 +52,7 @@ return new class extends Migration
             $table->text('document_rejection_reason')->nullable()->after('document_status'); // سبب رفض المستندات
             
             // Operation assignment fields
-            $table->unsignedBigInteger('assigned_partner_id')->nullable()->after('document_rejection_reason'); // الشريك المكلف
+            $table->unsignedBigInteger('assigned_partner_id')->nullable()->after('document_rejection_reason'); // الالشيخ المكلف
             $table->date('job_date')->nullable()->after('assigned_partner_id'); // تاريخ العمل
             $table->time('job_time')->nullable()->after('job_date'); // وقت العمل
             $table->string('job_number')->nullable()->after('job_time'); // رقم الفتر

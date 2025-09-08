@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('partners', function (Blueprint $table) {
             $table->id();
-            $table->string('name'); // اسم الشريك
+            $table->string('name'); // اسم الالشيخ
             $table->string('license_number')->unique(); // رقم الترخيص
             $table->text('service_scope'); // نطاق الخدمات
             $table->string('phone')->nullable(); // رقم الهاتف

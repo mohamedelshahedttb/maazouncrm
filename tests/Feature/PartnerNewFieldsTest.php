@@ -137,3 +137,5 @@ class PartnerNewFieldsTest extends TestCase
         $this->assertEquals('DOC789', $partner->document_number);
     }
 }
+
+

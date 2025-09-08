@@ -88,7 +88,7 @@ class User extends Authenticatable
         return match($this->role) {
             self::ROLE_ADMIN => 'مدير',
             self::ROLE_STAFF => 'موظف',
-            self::ROLE_PARTNER => 'شريك',
+            self::ROLE_PARTNER => 'الشيخ',
             default => 'غير محدد'
         };
     }

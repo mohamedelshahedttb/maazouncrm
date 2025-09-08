@@ -22,7 +22,7 @@ return new class extends Migration
             $table->text('execution_notes')->nullable(); // ملاحظات التنفيذ
             $table->text('blocking_reason')->nullable(); // سبب التعطيل
             $table->foreignId('assigned_to')->nullable()->constrained('users')->onDelete('set null'); // المسؤول
-            $table->foreignId('assigned_partner_id')->nullable()->constrained('partners')->onDelete('set null'); // الشريك المسؤول
+            $table->foreignId('assigned_partner_id')->nullable()->constrained('partners')->onDelete('set null'); // الالشيخ المسؤول
             $table->boolean('is_active')->default(true); // نشط
             $table->timestamps();
             

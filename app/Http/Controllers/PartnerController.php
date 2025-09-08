@@ -44,7 +44,7 @@ class PartnerController extends Controller
         Partner::create($validated);
 
         return redirect()->route('partners.index')
-            ->with('success', 'تم إنشاء الشريك بنجاح');
+            ->with('success', 'تم إنشاء الالشيخ بنجاح');
     }
 
     public function show(Partner $partner)
@@ -83,13 +83,13 @@ class PartnerController extends Controller
         $partner->update($validated);
 
         return redirect()->route('partners.index')
-            ->with('success', 'تم تحديث الشريك بنجاح');
+            ->with('success', 'تم تحديث الالشيخ بنجاح');
     }
 
     public function destroy(Partner $partner)
     {
         $partner->delete();
         return redirect()->route('partners.index')
-            ->with('success', 'تم حذف الشريك بنجاح');
+            ->with('success', 'تم حذف الالشيخ بنجاح');
     }
 }

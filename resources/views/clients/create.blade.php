@@ -31,24 +31,79 @@
                         @enderror
                     </div>
 
-                    <!-- Bride Name -->
+                    <!-- Relationship Status -->
                     <div>
-                        <label for="bride_name" class="block text-sm font-medium text-gray-700 mb-2">اسم العروس</label>
-                        <input type="text" name="bride_name" id="bride_name" value="{{ old('bride_name') }}"
+                        <label for="relationship_status" class="block text-sm font-medium text-gray-700 mb-2">صلة القرابة ولي العروسة</label>
+                        <input type="text" name="relationship_status" id="relationship_status" value="{{ old('relationship_status') }}"
                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                               placeholder="أدخل اسم العروس">
-                        @error('bride_name')
+                               placeholder="مثل: والد، أخ، عم، خال">
+                        @error('relationship_status')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
                     </div>
 
-                    <!-- Guardian Name -->
+                    <!-- Bride Age -->
                     <div>
-                        <label for="guardian_name" class="block text-sm font-medium text-gray-700 mb-2">اسم ولي العروس</label>
-                        <input type="text" name="guardian_name" id="guardian_name" value="{{ old('guardian_name') }}"
+                        <label for="bride_age" class="block text-sm font-medium text-gray-700 mb-2">سن العروسة</label>
+                        <input type="number" name="bride_age" id="bride_age" value="{{ old('bride_age') }}" min="1" max="100"
                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                               placeholder="أدخل اسم ولي العروس">
-                        @error('guardian_name')
+                               placeholder="أدخل سن العروسة">
+                        @error('bride_age')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Event Date -->
+                    <div>
+                        <label for="event_date" class="block text-sm font-medium text-gray-700 mb-2">تاريخ المناسبة</label>
+                        <input type="date" name="event_date" id="event_date" value="{{ old('event_date') }}"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        @error('event_date')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Mahr -->
+                    <div>
+                        <label for="mahr" class="block text-sm font-medium text-gray-700 mb-2">المؤخر</label>
+                        <input type="text" name="mahr" id="mahr" value="{{ old('mahr') }}"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                               placeholder="أدخل المؤخر">
+                        @error('mahr')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Bride ID Address -->
+                    <div>
+                        <label for="bride_id_address" class="block text-sm font-medium text-gray-700 mb-2">عنوان العروسة حسب البطاقة</label>
+                        <textarea name="bride_id_address" id="bride_id_address" rows="3"
+                                  class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                  placeholder="أدخل عنوان العروسة حسب البطاقة">{{ old('bride_id_address') }}</textarea>
+                        @error('bride_id_address')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Contract Delivery Method -->
+                    <div>
+                        <label for="contract_delivery_method" class="block text-sm font-medium text-gray-700 mb-2">طريقة استلام العقد</label>
+                        <select name="contract_delivery_method" id="contract_delivery_method" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            <option value="">اختر طريقة الاستلام</option>
+                            <option value="delivery" {{ old('contract_delivery_method') == 'delivery' ? 'selected' : '' }}>ديليفري</option>
+                            <option value="office" {{ old('contract_delivery_method') == 'office' ? 'selected' : '' }}>المكتب</option>
+                        </select>
+                        @error('contract_delivery_method')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Contract Delivery Date -->
+                    <div>
+                        <label for="contract_delivery_date" class="block text-sm font-medium text-gray-700 mb-2">تاريخ استلام العقد</label>
+                        <input type="date" name="contract_delivery_date" id="contract_delivery_date" value="{{ old('contract_delivery_date') }}"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        @error('contract_delivery_date')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
                     </div>
@@ -67,16 +122,6 @@
 
                 <!-- Right Column -->
                 <div class="space-y-6">
-                    <!-- Email -->
-                    <div>
-                        <label for="email" class="block text-sm font-medium text-gray-700 mb-2">البريد الإلكتروني</label>
-                        <input type="email" name="email" id="email" value="{{ old('email') }}"
-                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                               placeholder="مثل: client@example.com">
-                        @error('email')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
-                    </div>
 
                     <!-- WhatsApp Number -->
                     <div>
@@ -140,17 +185,6 @@
                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                placeholder="https://maps.google.com/...">
                         @error('google_maps_link')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <!-- Relationship Status -->
-                    <div>
-                        <label for="relationship_status" class="block text-sm font-medium text-gray-700 mb-2">صلة القرابة ولي العروسة</label>
-                        <input type="text" name="relationship_status" id="relationship_status" value="{{ old('relationship_status') }}"
-                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                               placeholder="مثل: والد، أخ، عم، خال">
-                        @error('relationship_status')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
                     </div>
