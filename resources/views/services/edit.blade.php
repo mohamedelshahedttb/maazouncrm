@@ -122,6 +122,9 @@
                     @enderror
                 </div>
             </div>
+            
+            <!-- Rate Policies Management (Livewire) -->
+            <livewire:service-rate-policies-manager :service-id="$service->id" />
 
             <div class="flex justify-end space-x-3 space-x-reverse mt-8 pt-6 border-t border-gray-200">
                 <a href="{{ route('services.show', $service) }}" class="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50">

@@ -11,6 +11,7 @@ use App\Http\Controllers\TaskController;
 use App\Http\Controllers\ClientOrderController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ConversationController;
+use App\Http\Controllers\AreaController;
 use App\Http\Controllers\PartnerAssistanceRequestController;
 use App\Http\Controllers\SupplierOrderController;
 use App\Http\Controllers\ReportController;
@@ -19,6 +20,9 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ClientSourceController;
 use App\Http\Controllers\IntegrationController;
 use App\Http\Controllers\WebhookController;
+use Illuminate\Http\Request;
+use App\Services\PricingService;
+use App\Models\Area;
 
 Route::get('/', function () {
     return redirect('/dashboard');
@@ -28,6 +32,20 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
+
+    // Areas CRUD
+    Route::resource('areas', AreaController::class)->except(['show']);
+
+    // Pricing calculation endpoint
+    Route::post('/pricing/calculate', function (Request $request, PricingService $pricing) {
+        $validated = $request->validate([
+            'service_id' => 'required|exists:services,id',
+            'area_id' => 'nullable|exists:areas,id',
+            'mahr' => 'nullable|numeric|min:0',
+        ]);
+        $price = $pricing->calculate((int)$validated['service_id'], isset($validated['area_id']) ? (int)$validated['area_id'] : null, isset($validated['mahr']) ? (float)$validated['mahr'] : null);
+        return response()->json(['price' => $price]);
+    })->name('pricing.calculate');
 
     // Clients Management
     Route::resource('clients', ClientController::class);
