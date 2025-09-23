@@ -17,6 +17,7 @@ class Client extends Model implements HasMedia
 
     protected $fillable = [
         'name',
+        'groom_name',
         'bride_name',
         'guardian_name',
         'phone',
@@ -29,10 +30,20 @@ class Client extends Model implements HasMedia
         'relationship_status',
         'bride_age',
         'event_date',
+        'contract_location',
+        'contract_cost',
+        'contract_address',
         'mahr',
         'bride_id_address',
         'contract_delivery_method',
         'contract_delivery_date',
+        'temporary_document',
+        'sheikh_name',
+        'book_number',
+        'document_number',
+        'coupon_arrival_date',
+        'document_receipt_date',
+        'document_receiver',
         'google_maps_link',
         'governorate',
         'area',
@@ -59,9 +70,12 @@ class Client extends Model implements HasMedia
         'next_follow_up_date' => 'date',
         'event_date' => 'date',
         'contract_delivery_date' => 'date',
+        'coupon_arrival_date' => 'date',
+        'document_receipt_date' => 'date',
         'job_date' => 'date',
         'final_document_delivery_date' => 'date',
         'final_document_notification_sent' => 'boolean',
+        'contract_cost' => 'decimal:2',
     ];
 
     // Status constants

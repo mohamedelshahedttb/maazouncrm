@@ -83,6 +83,11 @@ class Service extends Model
         return $this->executionSteps()->required();
     }
 
+    public function ratePolicies(): HasMany
+    {
+        return $this->hasMany(ServiceRatePolicy::class);
+    }
+
     // Scopes
     public function scopeActive($query)
     {
