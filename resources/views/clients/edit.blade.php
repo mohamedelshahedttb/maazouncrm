@@ -113,16 +113,16 @@
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
-                                    <label for="status" class="block text-sm font-medium text-gray-700">الحالة *</label>
-                                    <select name="status" id="status" required
+                                    <label for="client_status" class="block text-sm font-medium text-gray-700">الحالة *</label>
+                                    <select name="client_status" id="client_status" required
                                             class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                                         <option value="">اختر الحالة</option>
-                                        <option value="new" {{ old('status', $client->status) == 'new' ? 'selected' : '' }}>جديد</option>
-                                        <option value="in_progress" {{ old('status', $client->status) == 'in_progress' ? 'selected' : '' }}>قيد العمل</option>
-                                        <option value="completed" {{ old('status', $client->status) == 'completed' ? 'selected' : '' }}>مكتمل</option>
-                                        <option value="cancelled" {{ old('status', $client->status) == 'cancelled' ? 'selected' : '' }}>ملغي</option>
+                                        <option value="new" {{ old('client_status', $client->client_status) == 'new' ? 'selected' : '' }}>جديد</option>
+                                        <option value="in_progress" {{ old('client_status', $client->client_status) == 'in_progress' ? 'selected' : '' }}>قيد العمل</option>
+                                        <option value="completed" {{ old('client_status', $client->client_status) == 'completed' ? 'selected' : '' }}>مكتمل</option>
+                                        <option value="cancelled" {{ old('client_status', $client->client_status) == 'cancelled' ? 'selected' : '' }}>ملغي</option>
                                     </select>
-                                    @error('status')
+                                    @error('client_status')
                                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                     @enderror
                                 </div>
@@ -156,8 +156,13 @@
 
                                 <div>
                                     <label for="next_follow_up_date" class="block text-sm font-medium text-gray-700">تاريخ المتابعة التالية</label>
-                                    <input type="date" name="next_follow_up_date" id="next_follow_up_date" value="{{ old('next_follow_up_date', $client->next_follow_up_date?->format('Y-m-d')) }}"
-                                           class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                    <div class="flex gap-2">
+                                        <input type="text" name="next_follow_up_date" id="next_follow_up_date" value="{{ old('next_follow_up_date', $client->next_follow_up_date?->format('d/m/Y')) }}"
+                                               class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                               placeholder="dd/mm/yyyy">
+                                        <input type="date" id="next_follow_up_date_calendar"
+                                               class="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -227,4 +232,36 @@
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Date picker functionality
+    const dateInput = document.getElementById('next_follow_up_date');
+    const calendarInput = document.getElementById('next_follow_up_date_calendar');
+
+    if (dateInput && calendarInput) {
+        // Calendar to text conversion
+        calendarInput.addEventListener('change', function() {
+            if (this.value) {
+                const date = new Date(this.value);
+                const day = String(date.getDate()).padStart(2, '0');
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const year = date.getFullYear();
+                dateInput.value = `${day}/${month}/${year}`;
+            }
+        });
+
+        // Text to calendar conversion
+        dateInput.addEventListener('blur', function() {
+            if (this.value && this.value.match(/^\d{2}\/\d{2}\/\d{4}$/)) {
+                const [day, month, year] = this.value.split('/');
+                const date = new Date(year, month - 1, day);
+                if (!isNaN(date.getTime())) {
+                    calendarInput.value = date.toISOString().split('T')[0];
+                }
+            }
+        });
+    }
+});
+</script>
 @endsection

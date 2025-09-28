@@ -15,11 +15,27 @@ use Carbon\Carbon;
 
 class ClientController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $clients = Client::with(['appointments', 'orders'])
-            ->orderBy('created_at', 'desc')
-            ->paginate(15);
+        $query = Client::with(['appointments', 'orders']);
+
+        // Apply search filter
+        if ($request->filled('search')) {
+            $search = $request->get('search');
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('phone', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%")
+                  ->orWhere('bride_name', 'like', "%{$search}%");
+            });
+        }
+
+        // Apply status filter
+        if ($request->filled('status')) {
+            $query->where('client_status', $request->get('status'));
+        }
+
+        $clients = $query->orderBy('created_at', 'desc')->paginate(15);
 
         return view('clients.index', compact('clients'));
     }
@@ -28,7 +44,8 @@ class ClientController extends Controller
     {
         $services = Service::where('is_active', true)->get();
         $sources = \App\Models\ClientSource::where('is_active', true)->get();
-        return view('clients.create', compact('services', 'sources'));
+        $products = \App\Models\Product::where('is_active', true)->where('status', 'active')->get();
+        return view('clients.create', compact('services', 'sources', 'products'));
     }
 
     public function store(Request $request)
@@ -37,29 +54,36 @@ class ClientController extends Controller
             'name' => 'required|string|max:255',
             'groom_name' => 'nullable|string|max:255',
             'bride_name' => 'nullable|string|max:255',
-            'phone' => 'required|string|max:20',
+            'phone' => 'nullable|string|max:20',
             'address' => 'nullable|string|max:500',
             'geographical_area' => 'nullable|string|max:255',
-            'status' => 'required|in:new,in_progress,completed,cancelled',
+            'client_status' => 'required|in:new,in_progress,completed,cancelled',
             'call_result' => 'nullable|in:interested,not_interested,follow_up_later,potential_client,confirmed_booking,completed_booking,cancelled,inquiry,client_booking,no_answer,busy_number',
-            'next_follow_up_date' => 'nullable|date',
+            'next_follow_up_date' => 'nullable|string',
             'relationship_status' => 'nullable|string|max:255',
             'bride_age' => 'nullable|integer|min:1|max:100',
-            'event_date' => 'nullable|date|after_or_equal:today',
+            'accessories' => 'nullable|array',
+            'accessories.*' => 'exists:products,id',
+            'event_date' => 'nullable|string',
             'contract_location' => 'nullable|string|max:255',
             'contract_cost' => 'nullable|numeric|min:0',
+            'discount_type' => 'nullable|in:percentage,fixed_amount',
+            'discount_value' => 'nullable|numeric|min:0',
+            'final_price' => 'nullable|numeric|min:0',
             'contract_address' => 'nullable|string|max:1000',
             'mahr' => 'nullable|string|max:255',
             'bride_id_address' => 'nullable|string|max:1000',
             'contract_delivery_method' => 'nullable|in:delivery,office',
-            'contract_delivery_date' => 'nullable|date|after_or_equal:today',
+            'contract_delivery_date' => 'nullable|string',
             'temporary_document' => 'nullable|string|max:255',
             'sheikh_name' => 'nullable|string|max:255',
             'book_number' => 'nullable|string|max:255',
             'document_number' => 'nullable|string|max:255',
-            'coupon_arrival_date' => 'nullable|date',
-            'document_receipt_date' => 'nullable|date',
+            'coupon_arrival_date' => 'nullable|string',
+            'document_receipt_date' => 'nullable|string',
             'document_receiver' => 'nullable|in:delivery,client,client_relative',
+            'delivery_man_name' => 'nullable|string|max:255',
+            'client_relative_name' => 'nullable|string|max:255',
             'google_maps_link' => 'nullable|url|max:500',
             'governorate' => 'nullable|string|max:255',
             'area' => 'nullable|string|max:255',
@@ -68,7 +92,21 @@ class ClientController extends Controller
             'is_active' => 'boolean',
             'service_id' => 'nullable|exists:services,id',
             'source_id' => 'nullable|exists:client_sources,id',
+            'client_status' => 'nullable|in:new,in_progress,completed,cancelled',
         ]);
+
+        // Convert date fields from dd/mm/yyyy to yyyy-mm-dd
+        $dateFields = ['event_date', 'next_follow_up_date', 'coupon_arrival_date', 'document_receipt_date'];
+        foreach ($dateFields as $field) {
+            if (isset($validated[$field]) && $validated[$field]) {
+                try {
+                    $validated[$field] = \Carbon\Carbon::createFromFormat('d/m/Y', $validated[$field])->format('Y-m-d');
+                } catch (\Exception $e) {
+                    // If date conversion fails, return validation error
+                    return back()->withErrors([$field => 'تنسيق التاريخ غير صحيح. يجب أن يكون dd/mm/yyyy'])->withInput();
+                }
+            }
+        }
 
         $client = Client::create($validated);
 
@@ -104,7 +142,8 @@ class ClientController extends Controller
     {
         $services = Service::where('is_active', true)->get();
         $sources = \App\Models\ClientSource::where('is_active', true)->get();
-        return view('clients.edit', compact('client', 'services', 'sources'));
+        $products = \App\Models\Product::where('is_active', true)->where('status', 'active')->get();
+        return view('clients.edit', compact('client', 'services', 'sources', 'products'));
     }
 
     public function update(Request $request, Client $client)
@@ -114,30 +153,37 @@ class ClientController extends Controller
             'groom_name' => 'nullable|string|max:255',
             'bride_name' => 'nullable|string|max:255',
             'guardian_name' => 'nullable|string|max:255',
-            'phone' => 'required|string|max:20',
+            'phone' => 'nullable|string|max:20',
             'email' => 'nullable|email|max:255',
             'address' => 'nullable|string|max:500',
             'geographical_area' => 'nullable|string|max:255',
-            'status' => 'required|in:new,in_progress,completed,cancelled',
+            'client_status' => 'required|in:new,in_progress,completed,cancelled',
             'call_result' => 'nullable|in:interested,not_interested,follow_up_later,potential_client,confirmed_booking,completed_booking,cancelled,inquiry,client_booking,no_answer,busy_number',
-            'next_follow_up_date' => 'nullable|date',
+            'next_follow_up_date' => 'nullable|string',
             'relationship_status' => 'nullable|string|max:255',
             'bride_age' => 'nullable|integer|min:1|max:100',
-            'event_date' => 'nullable|date|after_or_equal:today',
+            'accessories' => 'nullable|array',
+            'accessories.*' => 'exists:products,id',
+            'event_date' => 'nullable|string',
             'contract_location' => 'nullable|string|max:255',
             'contract_cost' => 'nullable|numeric|min:0',
+            'discount_type' => 'nullable|in:percentage,fixed_amount',
+            'discount_value' => 'nullable|numeric|min:0',
+            'final_price' => 'nullable|numeric|min:0',
             'contract_address' => 'nullable|string|max:1000',
             'mahr' => 'nullable|string|max:255',
             'bride_id_address' => 'nullable|string|max:1000',
             'contract_delivery_method' => 'nullable|in:delivery,office',
-            'contract_delivery_date' => 'nullable|date|after_or_equal:today',
+            'contract_delivery_date' => 'nullable|string',
             'temporary_document' => 'nullable|string|max:255',
             'sheikh_name' => 'nullable|string|max:255',
             'book_number' => 'nullable|string|max:255',
             'document_number' => 'nullable|string|max:255',
-            'coupon_arrival_date' => 'nullable|date',
-            'document_receipt_date' => 'nullable|date',
+            'coupon_arrival_date' => 'nullable|string',
+            'document_receipt_date' => 'nullable|string',
             'document_receiver' => 'nullable|in:delivery,client,client_relative',
+            'delivery_man_name' => 'nullable|string|max:255',
+            'client_relative_name' => 'nullable|string|max:255',
             'google_maps_link' => 'nullable|url|max:500',
             'governorate' => 'nullable|string|max:255',
             'area' => 'nullable|string|max:255',
@@ -146,7 +192,20 @@ class ClientController extends Controller
             'is_active' => 'boolean',
             'service_id' => 'nullable|exists:services,id',
             'source_id' => 'nullable|exists:client_sources,id',
+            'client_status' => 'nullable|in:new,in_progress,completed,cancelled',
         ]);
+
+        // Convert date fields from dd/mm/yyyy to yyyy-mm-dd
+        $dateFields = ['event_date', 'next_follow_up_date', 'coupon_arrival_date', 'document_receipt_date'];
+        foreach ($dateFields as $field) {
+            if (isset($validated[$field]) && $validated[$field]) {
+                try {
+                    $validated[$field] = \Carbon\Carbon::createFromFormat('d/m/Y', $validated[$field])->format('Y-m-d');
+                } catch (\Exception $e) {
+                    return back()->withErrors([$field => 'تنسيق التاريخ غير صحيح. يجب أن يكون dd/mm/yyyy'])->withInput();
+                }
+            }
+        }
 
         $client->update($validated);
 
@@ -223,7 +282,7 @@ class ClientController extends Controller
         $clients = Client::with(['appointments', 'orders', 'service'])
             ->active()
             ->get()
-            ->groupBy('status');
+            ->groupBy('client_status');
 
         $stages = [
             'new' => 'جديد',

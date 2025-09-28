@@ -33,7 +33,7 @@ class ClientFactory extends Factory
             'area' => $this->faker->randomElement(['حي النرجس', 'حي الفيصلية', 'حي العليا', 'حي الملز', 'حي النهضة']),
             'google_maps_link' => 'https://maps.google.com/' . $this->faker->slug(),
             'relationship_status' => $this->faker->randomElement(['والد', 'أخ', 'عم', 'خال', 'ابن العم']),
-            'status' => $this->faker->randomElement(['new', 'in_progress', 'completed', 'cancelled']),
+            'client_status' => $this->faker->randomElement(['new', 'in_progress', 'completed', 'cancelled']),
             'call_result' => $this->faker->randomElement(['interested', 'not_interested', 'follow_up_later', 'potential_client', 'confirmed_booking', 'completed_booking', 'cancelled', 'inquiry', 'client_booking', 'no_answer', 'busy_number']),
             'next_follow_up_date' => $this->faker->dateTimeBetween('now', '+30 days'),
             'document_status' => $this->faker->randomElement(['pending', 'under_review', 'approved', 'rejected', 'incomplete']),

@@ -26,11 +26,11 @@
 
     <!-- Search and Filters -->
     <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
-        <div class="flex flex-col md:flex-row gap-4">
+        <form method="GET" action="{{ route('clients.index') }}" class="flex flex-col md:flex-row gap-4">
             <!-- Search Bar -->
             <div class="flex-1">
                 <div class="relative">
-                    <input type="text" placeholder="... ابحث عن عميل" class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    <input type="text" name="search" value="{{ request('search') }}" placeholder="... ابحث عن عميل" class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                     <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
                         <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
@@ -41,13 +41,13 @@
 
             <!-- Status Filter -->
             <div class="flex gap-2">
-                <button class="px-4 py-2 text-sm font-medium text-blue-100 bg-blue-500 rounded-lg hover:bg-blue-600 transition-colors">الكل</button>
-<button class="px-4 py-2 text-sm font-medium text-blue-100 bg-blue-500 rounded-lg hover:bg-blue-600 transition-colors">جديد</button>
-<button class="px-4 py-2 text-sm font-medium text-blue-100 bg-blue-500 rounded-lg hover:bg-blue-600 transition-colors">قيد التقدم</button>
-<button class="px-4 py-2 text-sm font-medium text-blue-100 bg-blue-500 rounded-lg hover:bg-blue-600 transition-colors">مكتمل</button>
-<button class="px-4 py-2 text-sm font-medium text-blue-100 bg-blue-500 rounded-lg hover:bg-blue-600 transition-colors">ملغى</button>
+                <a href="{{ route('clients.index') }}" class="px-4 py-2 text-sm font-medium {{ !request('status') ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' }} rounded-lg transition-colors">الكل</a>
+                <a href="{{ route('clients.index', ['status' => 'new']) }}" class="px-4 py-2 text-sm font-medium {{ request('status') == 'new' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' }} rounded-lg transition-colors">جديد</a>
+                <a href="{{ route('clients.index', ['status' => 'in_progress']) }}" class="px-4 py-2 text-sm font-medium {{ request('status') == 'in_progress' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' }} rounded-lg transition-colors">قيد التقدم</a>
+                <a href="{{ route('clients.index', ['status' => 'completed']) }}" class="px-4 py-2 text-sm font-medium {{ request('status') == 'completed' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' }} rounded-lg transition-colors">مكتمل</a>
+                <a href="{{ route('clients.index', ['status' => 'cancelled']) }}" class="px-4 py-2 text-sm font-medium {{ request('status') == 'cancelled' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' }} rounded-lg transition-colors">ملغى</a>
             </div>
-        </div>
+        </form>
     </div>
 
     <!-- Clients List -->
@@ -102,8 +102,8 @@
                                     'cancelled' => 'ملغى'
                                 ];
                             @endphp
-                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $statusColors[$client->status] ?? 'bg-gray-100 text-gray-800' }}">
-                                {{ $statusText[$client->status] ?? $client->status }}
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $statusColors[$client->client_status] ?? 'bg-gray-100 text-gray-800' }}">
+                                {{ $statusText[$client->client_status] ?? $client->client_status }}
                             </span>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">

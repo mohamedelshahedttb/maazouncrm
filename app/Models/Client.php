@@ -24,14 +24,18 @@ class Client extends Model implements HasMedia
         'email',
         'address',
         'geographical_area',
-        'status',
+        'client_status',
         'call_result',
         'next_follow_up_date',
         'relationship_status',
         'bride_age',
+        'accessories',
         'event_date',
         'contract_location',
         'contract_cost',
+        'discount_type',
+        'discount_value',
+        'final_price',
         'contract_address',
         'mahr',
         'bride_id_address',
@@ -44,6 +48,8 @@ class Client extends Model implements HasMedia
         'coupon_arrival_date',
         'document_receipt_date',
         'document_receiver',
+        'delivery_man_name',
+        'client_relative_name',
         'google_maps_link',
         'governorate',
         'area',
@@ -63,6 +69,7 @@ class Client extends Model implements HasMedia
         'is_active',
         'service_id',
         'source_id',
+        'client_status',
     ];
 
     protected $casts = [
@@ -76,6 +83,9 @@ class Client extends Model implements HasMedia
         'final_document_delivery_date' => 'date',
         'final_document_notification_sent' => 'boolean',
         'contract_cost' => 'decimal:2',
+        'discount_value' => 'decimal:2',
+        'final_price' => 'decimal:2',
+        'accessories' => 'array',
     ];
 
     // Status constants
@@ -148,7 +158,7 @@ class Client extends Model implements HasMedia
 
     public function scopeByStatus($query, $status)
     {
-        return $query->where('status', $status);
+        return $query->where('client_status', $status);
     }
 
     // Methods
@@ -258,7 +268,7 @@ class Client extends Model implements HasMedia
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
-            ->logOnly(['name', 'status', 'phone', 'email'])
+            ->logOnly(['name', 'client_status', 'phone', 'email'])
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs();
     }

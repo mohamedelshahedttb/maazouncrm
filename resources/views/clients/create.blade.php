@@ -50,8 +50,13 @@
                     <!-- Contract Date -->
                     <div>
                         <label for="event_date" class="block text-sm font-medium text-gray-700 mb-2">تاريخ العقد</label>
-                        <input type="date" name="event_date" id="event_date" value="{{ old('event_date') }}"
-                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <div class="flex gap-2">
+                            <input type="text" name="event_date" id="event_date" value="{{ old('event_date') }}"
+                                   class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                   placeholder="dd/mm/yyyy">
+                            <input type="date" id="event_date_calendar" 
+                                   class="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        </div>
                         @error('event_date')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
@@ -79,29 +84,6 @@
                         @enderror
                     </div>
 
-                    <!-- Auto Calculated Price -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">سعر الخدمة (محسوب تلقائياً)</label>
-                        <div class="flex items-center gap-3">
-                            <input type="text" id="calculated_price" readonly
-                                   class="w-full px-3 py-2 border border-gray-300 bg-gray-50 rounded-lg focus:outline-none"
-                                   value="">
-                            <button type="button" id="recalculate_price" class="px-4 py-2 bg-green-600 text-white rounded-lg">حساب</button>
-                        </div>
-                        <p class="text-xs text-gray-500 mt-1">الحساب = مواصلات المنطقة + نسبة من المؤخر (إن وجدت) + تعريفة المؤخر حسب السياسة</p>
-                    </div>
-
-                    <!-- Contract Location -->
-                    <div>
-                        <label for="contract_location" class="block text-sm font-medium text-gray-700 mb-2">مكان العقد</label>
-                        <input type="text" name="contract_location" id="contract_location" value="{{ old('contract_location') }}"
-                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                               placeholder="أدخل مكان العقد">
-                        @error('contract_location')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
-                    </div>
-
                     <!-- Area Selection for Pricing -->
                     <div>
                         <label for="area_id" class="block text-sm font-medium text-gray-700 mb-2">المنطقة (لحساب السعر)</label>
@@ -116,16 +98,29 @@
                         </select>
                     </div>
 
-                    <!-- Contract Cost -->
+                    <!-- Contract Location -->
                     <div>
-                        <label for="contract_cost" class="block text-sm font-medium text-gray-700 mb-2">تكلفة العقد</label>
-                        <input type="number" name="contract_cost" id="contract_cost" value="{{ old('contract_cost') }}" step="0.01" min="0"
+                        <label for="contract_location" class="block text-sm font-medium text-gray-700 mb-2">مكان العقد</label>
+                        <input type="text" name="contract_location" id="contract_location" value="{{ old('contract_location') }}"
                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                               placeholder="أدخل تكلفة العقد">
-                        @error('contract_cost')
+                               placeholder="أدخل مكان العقد">
+                        @error('contract_location')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
                     </div>
+
+                    <!-- Auto Calculated Price -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">سعر الخدمة (محسوب تلقائياً)</label>
+                        <div class="flex items-center gap-3">
+                            <input type="text" id="calculated_price" readonly
+                                   class="w-full px-3 py-2 border border-gray-300 bg-gray-50 rounded-lg focus:outline-none"
+                                   value="">
+                            <button type="button" id="recalculate_price" class="px-4 py-2 bg-green-600 text-white rounded-lg">حساب</button>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-1">الحساب = مواصلات المنطقة + نسبة من المؤخر (إن وجدت) + تعريفة المؤخر حسب السياسة</p>
+                    </div>
+
 
                     <!-- Guardian Relationship -->
                     <div>
@@ -149,12 +144,73 @@
                         @enderror
                     </div>
 
+                    <!-- Contract Accessories -->
+                    <div>
+                        <label for="accessories" class="block text-sm font-medium text-gray-700 mb-2">اكسسوارات العقد</label>
+                        <select name="accessories[]" id="accessories" multiple
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            @foreach($products as $product)
+                                <option value="{{ $product->id }}" {{ in_array($product->id, old('accessories', [])) ? 'selected' : '' }}>
+                                    {{ $product->name }} - {{ number_format($product->selling_price, 2) }} {{ $product->currency }}
+                                </option>
+                            @endforeach
+                        </select>
+                        <p class="text-xs text-gray-500 mt-1">اضغط Ctrl للاختيار المتعدد</p>
+                        @error('accessories')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
                     <!-- Follow-up Date -->
                     <div>
                         <label for="next_follow_up_date" class="block text-sm font-medium text-gray-700 mb-2">موعد المتابعة</label>
-                        <input type="date" name="next_follow_up_date" id="next_follow_up_date" value="{{ old('next_follow_up_date') }}"
-                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <div class="flex gap-2">
+                            <input type="text" name="next_follow_up_date" id="next_follow_up_date" value="{{ old('next_follow_up_date') }}"
+                                   class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                   placeholder="dd/mm/yyyy">
+                            <input type="date" id="next_follow_up_date_calendar" 
+                                   class="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        </div>
                         @error('next_follow_up_date')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Client Status -->
+                    <div>
+                        <label for="client_status" class="block text-sm font-medium text-gray-700 mb-2">حالة العميل</label>
+                        <select name="client_status" id="client_status" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            <option value="new" {{ old('client_status', 'new') == 'new' ? 'selected' : '' }}>جديد</option>
+                            <option value="in_progress" {{ old('client_status') == 'in_progress' ? 'selected' : '' }}>جاري العمل عليه</option>
+                            <option value="completed" {{ old('client_status') == 'completed' ? 'selected' : '' }}>مكتمل</option>
+                            <option value="cancelled" {{ old('client_status') == 'cancelled' ? 'selected' : '' }}>ملغي</option>
+                        </select>
+                        @error('client_status')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Discount Type -->
+                    <div>
+                        <label for="discount_type" class="block text-sm font-medium text-gray-700 mb-2">نسبة الخصم</label>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <select name="discount_type" id="discount_type" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                    <option value="">اختر نوع الخصم</option>
+                                    <option value="percentage" {{ old('discount_type') == 'percentage' ? 'selected' : '' }}>نسبة مئوية</option>
+                                    <option value="fixed_amount" {{ old('discount_type') == 'fixed_amount' ? 'selected' : '' }}>مبلغ ثابت</option>
+                                </select>
+                            </div>
+                            <div>
+                                <input type="number" name="discount_value" id="discount_value" value="{{ old('discount_value') }}" step="0.01" min="0"
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                       placeholder="قيمة الخصم">
+                            </div>
+                        </div>
+                        @error('discount_type')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                        @error('discount_value')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
                     </div>
@@ -177,6 +233,9 @@
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
                     </div>
+
+
+
                     <!-- WhatsApp Number -->
                     <div>
                         <label for="whatsapp_number" class="block text-sm font-medium text-gray-700 mb-2">رقم الواتساب</label>
@@ -190,8 +249,8 @@
 
                     <!-- Phone Number -->
                     <div>
-                        <label for="phone" class="block text-sm font-medium text-gray-700 mb-2">رقم الهاتف *</label>
-                        <input type="tel" name="phone" id="phone" value="{{ old('phone') }}" required
+                        <label for="phone" class="block text-sm font-medium text-gray-700 mb-2">رقم الهاتف</label>
+                        <input type="tel" name="phone" id="phone" value="{{ old('phone') }}"
                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                placeholder="مثل: 05XXXXXXXXX">
                         @error('phone')
@@ -201,8 +260,8 @@
 
                     <!-- Groom Name -->
                     <div>
-                        <label for="groom_name" class="block text-sm font-medium text-gray-700 mb-2">اسم الزوج *</label>
-                        <input type="text" name="groom_name" id="groom_name" value="{{ old('groom_name') }}" required
+                        <label for="groom_name" class="block text-sm font-medium text-gray-700 mb-2">اسم الزوج</label>
+                        <input type="text" name="groom_name" id="groom_name" value="{{ old('groom_name') }}"
                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                placeholder="أدخل اسم الزوج">
                         @error('groom_name')
@@ -290,8 +349,13 @@
                     <!-- Coupon Arrival Date -->
                     <div>
                         <label for="coupon_arrival_date" class="block text-sm font-medium text-gray-700 mb-2">تاريخ وصول القسيمة</label>
-                        <input type="date" name="coupon_arrival_date" id="coupon_arrival_date" value="{{ old('coupon_arrival_date') }}"
-                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <div class="flex gap-2">
+                            <input type="text" name="coupon_arrival_date" id="coupon_arrival_date" value="{{ old('coupon_arrival_date') }}"
+                                   class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                   placeholder="dd/mm/yyyy">
+                            <input type="date" id="coupon_arrival_date_calendar" 
+                                   class="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        </div>
                         @error('coupon_arrival_date')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
@@ -300,8 +364,13 @@
                     <!-- Document Receipt Date -->
                     <div>
                         <label for="document_receipt_date" class="block text-sm font-medium text-gray-700 mb-2">تاريخ استلام الوثيقة</label>
-                        <input type="date" name="document_receipt_date" id="document_receipt_date" value="{{ old('document_receipt_date') }}"
-                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <div class="flex gap-2">
+                            <input type="text" name="document_receipt_date" id="document_receipt_date" value="{{ old('document_receipt_date') }}"
+                                   class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                   placeholder="dd/mm/yyyy">
+                            <input type="date" id="document_receipt_date_calendar" 
+                                   class="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        </div>
                         @error('document_receipt_date')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
@@ -317,6 +386,28 @@
                             <option value="client_relative" {{ old('document_receiver') == 'client_relative' ? 'selected' : '' }}>أحد أقارب العميل</option>
                         </select>
                         @error('document_receiver')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Delivery Man Name (conditional) -->
+                    <div id="delivery_man_field" style="display: none;">
+                        <label for="delivery_man_name" class="block text-sm font-medium text-gray-700 mb-2">اسم الدليفري</label>
+                        <input type="text" name="delivery_man_name" id="delivery_man_name" value="{{ old('delivery_man_name') }}"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                               placeholder="أدخل اسم الدليفري">
+                        @error('delivery_man_name')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Client Relative Name (conditional) -->
+                    <div id="client_relative_field" style="display: none;">
+                        <label for="client_relative_name" class="block text-sm font-medium text-gray-700 mb-2">اسم قريب العميل</label>
+                        <input type="text" name="client_relative_name" id="client_relative_name" value="{{ old('client_relative_name') }}"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                               placeholder="أدخل اسم قريب العميل">
+                        @error('client_relative_name')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
                     </div>
@@ -355,6 +446,18 @@
                 @error('documents')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
+            </div>
+
+            <!-- Final Price Display -->
+            <div class="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-lg font-semibold text-blue-800">السعر النهائي</h3>
+                    <div class="text-right">
+                        <input type="hidden" name="final_price" id="final_price" value="{{ old('final_price') }}">
+                        <div id="final_price_display" class="text-2xl font-bold text-blue-900">0.00 جنيه</div>
+                        <p class="text-sm text-blue-600">السعر النهائي بعد الخصم</p>
+                    </div>
+                </div>
             </div>
 
             <!-- Form Actions -->
@@ -418,7 +521,11 @@ async function recalcPrice() {
   const serviceId = serviceIdEl.value ? parseInt(serviceIdEl.value) : null;
   const areaId = areaIdEl && areaIdEl.value ? parseInt(areaIdEl.value) : null;
   const mahr = parseNumber(mahrEl && mahrEl.value ? mahrEl.value : null);
-  if (!serviceId) { priceEl.value = ''; return; }
+  if (!serviceId) { 
+    priceEl.value = ''; 
+    calculateFinalPrice();
+    return; 
+  }
   try {
     const res = await fetch("{{ route('pricing.calculate') }}", {
       method: 'POST',
@@ -431,13 +538,118 @@ async function recalcPrice() {
     const data = await res.json();
     if (data && typeof data.price !== 'undefined') {
       priceEl.value = data.price.toFixed(2) + ' {{ config('app.currency', 'EGP') }}';
+      calculateFinalPrice();
     }
   } catch (e) { /* ignore */ }
 }
+
+function calculateFinalPrice() {
+  const calculatedPriceEl = document.getElementById('calculated_price');
+  const discountTypeEl = document.getElementById('discount_type');
+  const discountValueEl = document.getElementById('discount_value');
+  const finalPriceEl = document.getElementById('final_price');
+  const finalPriceDisplayEl = document.getElementById('final_price_display');
+  
+  if (!calculatedPriceEl || !calculatedPriceEl.value) {
+    finalPriceEl.value = '';
+    finalPriceDisplayEl.textContent = '0.00 جنيه';
+    return;
+  }
+  
+  const basePrice = parseNumber(calculatedPriceEl.value);
+  if (!basePrice) {
+    finalPriceEl.value = '';
+    finalPriceDisplayEl.textContent = '0.00 جنيه';
+    return;
+  }
+  
+  let finalPrice = basePrice;
+  
+  if (discountTypeEl && discountTypeEl.value && discountValueEl && discountValueEl.value) {
+    const discountValue = parseNumber(discountValueEl.value);
+    if (discountValue) {
+      if (discountTypeEl.value === 'percentage') {
+        finalPrice = basePrice - (basePrice * discountValue / 100);
+      } else if (discountTypeEl.value === 'fixed_amount') {
+        finalPrice = basePrice - discountValue;
+      }
+    }
+  }
+  
+  finalPrice = Math.max(0, finalPrice); // Ensure price is not negative
+  finalPriceEl.value = finalPrice.toFixed(2);
+  finalPriceDisplayEl.textContent = finalPrice.toFixed(2) + ' جنيه';
+}
+
+// Date formatting for dd/mm/yyyy
+function formatDateInput(input) {
+  input.addEventListener('input', function(e) {
+    let value = e.target.value.replace(/\D/g, '');
+    if (value.length >= 2) {
+      value = value.substring(0, 2) + '/' + value.substring(2);
+    }
+    if (value.length >= 5) {
+      value = value.substring(0, 5) + '/' + value.substring(5, 9);
+    }
+    e.target.value = value;
+  });
+}
+
+// Initialize date formatting and calendar functionality
+document.addEventListener('DOMContentLoaded', function() {
+  const dateInputs = ['event_date', 'next_follow_up_date', 'coupon_arrival_date', 'document_receipt_date'];
+  dateInputs.forEach(id => {
+    const input = document.getElementById(id);
+    const calendarInput = document.getElementById(id + '_calendar');
+    
+    if (input) formatDateInput(input);
+    
+    // Calendar to text conversion
+    if (calendarInput) {
+      calendarInput.addEventListener('change', function() {
+        if (this.value) {
+          const date = new Date(this.value);
+          const day = String(date.getDate()).padStart(2, '0');
+          const month = String(date.getMonth() + 1).padStart(2, '0');
+          const year = date.getFullYear();
+          input.value = `${day}/${month}/${year}`;
+        }
+      });
+    }
+  });
+
+  // Document receiver conditional fields
+  const documentReceiver = document.getElementById('document_receiver');
+  const deliveryManField = document.getElementById('delivery_man_field');
+  const clientRelativeField = document.getElementById('client_relative_field');
+
+  function toggleConditionalFields() {
+    const value = documentReceiver.value;
+    
+    // Hide all conditional fields
+    deliveryManField.style.display = 'none';
+    clientRelativeField.style.display = 'none';
+    
+    // Show relevant field based on selection
+    if (value === 'delivery') {
+      deliveryManField.style.display = 'block';
+    } else if (value === 'client_relative') {
+      clientRelativeField.style.display = 'block';
+    }
+  }
+
+  if (documentReceiver) {
+    documentReceiver.addEventListener('change', toggleConditionalFields);
+    // Initialize on page load
+    toggleConditionalFields();
+  }
+});
 
 document.getElementById('recalculate_price')?.addEventListener('click', recalcPrice);
 document.getElementById('area_id')?.addEventListener('change', recalcPrice);
 document.getElementById('mahr')?.addEventListener('input', recalcPrice);
 document.getElementById('service_id')?.addEventListener('change', recalcPrice);
+document.getElementById('discount_type')?.addEventListener('change', calculateFinalPrice);
+document.getElementById('discount_value')?.addEventListener('input', calculateFinalPrice);
 </script>
 @endsection
