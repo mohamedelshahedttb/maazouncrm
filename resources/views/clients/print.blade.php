@@ -140,11 +140,13 @@
                 <div class="grid-item"><span class="label">اسم الشيخ</span><span class="value">{{ $client->sheikh_name ?? '-' }}</span></div>
                 <div class="grid-item"><span class="label">رقم الدفتر</span><span class="value">{{ $client->book_number ?? '-' }}</span></div>
                 <div class="grid-item"><span class="label">رقم الوثيقة</span><span class="value">{{ $client->document_number ?? '-' }}</span></div>
+                <div class="grid-item"><span class="label">منفذ العقد</span><span class="value">{{ $client->contract_executor ?? '-' }}</span></div>
                 <div class="grid-item"><span class="label">تاريخ وصول القسيمة</span><span class="value">{{ $client->coupon_arrival_date?->format('d/m/Y') ?? '-' }}</span></div>
                 <div class="grid-item"><span class="label">تاريخ استلام الوثيقة</span><span class="value">{{ $client->document_receipt_date?->format('d/m/Y') ?? '-' }}</span></div>
                 <div class="grid-item"><span class="label">مستلم الوثيقة</span><span class="value">{{ $client->document_receiver_label }}</span></div>
                 <div class="grid-item"><span class="label">اسم الدليفري</span><span class="value">{{ $client->delivery_man_name ?? '-' }}</span></div>
                 <div class="grid-item"><span class="label">اسم قريب العميل</span><span class="value">{{ $client->client_relative_name ?? '-' }}</span></div>
+                <div class="grid-item"><span class="label">اسم العميل المستلم</span><span class="value">{{ $client->client_receiver_name ?? '-' }}</span></div>
             </div>
         </div>
 

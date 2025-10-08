@@ -193,6 +193,10 @@
                     <p>{{ $client->document_number ?? '-' }}</p>
                 </div>
                 <div class="info-item">
+                    <label>منفذ العقد</label>
+                    <p>{{ $client->contract_executor ?? '-' }}</p>
+                </div>
+                <div class="info-item">
                     <label>تاريخ وصول القسيمة</label>
                     <p>{{ $client->coupon_arrival_date?->format('d/m/Y') ?? '-' }}</p>
                 </div>
@@ -211,6 +215,10 @@
                  <div class="info-item">
                     <label>اسم قريب العميل</label>
                     <p>{{ $client->client_relative_name ?? '-' }}</p>
+                </div>
+                <div class="info-item">
+                    <label>اسم العميل المستلم</label>
+                    <p>{{ $client->client_receiver_name ?? '-' }}</p>
                 </div>
             </div>
             

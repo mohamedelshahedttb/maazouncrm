@@ -31,6 +31,22 @@
                         @enderror
                     </div>
 
+                    <!-- Service Selection (required for pricing) -->
+                    <div>
+                        <label for="service_id" class="block text-sm font-medium text-gray-700 mb-2">الخدمة المطلوبة</label>
+                        <select name="service_id" id="service_id" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            <option value="">اختر الخدمة</option>
+                            @foreach($services as $service)
+                                <option value="{{ $service->id }}" {{ old('service_id') == $service->id ? 'selected' : '' }}>
+                                    {{ $service->name }} - {{ number_format($service->price, 2) }} {{ $service->currency }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('service_id')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
                     <!-- Client Source -->
                     <div>
                         <label for="source_id" class="block text-sm font-medium text-gray-700 mb-2">مصدر العميل</label>
@@ -239,24 +255,6 @@
 
                 <!-- Right Column -->
                 <div class="space-y-6">
-                    <!-- Service Selection (required for pricing) -->
-                    <div>
-                        <label for="service_id" class="block text-sm font-medium text-gray-700 mb-2">الخدمة المطلوبة</label>
-                        <select name="service_id" id="service_id" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                            <option value="">اختر الخدمة</option>
-                            @foreach($services as $service)
-                                <option value="{{ $service->id }}" {{ old('service_id') == $service->id ? 'selected' : '' }}>
-                                    {{ $service->name }} - {{ number_format($service->price, 2) }} {{ $service->currency }}
-                                </option>
-                            @endforeach
-                        </select>
-                        @error('service_id')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-
-
                     <!-- WhatsApp Number -->
                     <div>
                         <label for="whatsapp_number" class="block text-sm font-medium text-gray-700 mb-2">رقم الواتساب</label>
@@ -367,6 +365,17 @@
                         @enderror
                     </div>
 
+                    <!-- Contract Executor -->
+                    <div>
+                        <label for="contract_executor" class="block text-sm font-medium text-gray-700 mb-2">منفذ العقد</label>
+                        <input type="text" name="contract_executor" id="contract_executor" value="{{ old('contract_executor') }}"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                               placeholder="أدخل اسم منفذ العقد">
+                        @error('contract_executor')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
                     <!-- Coupon Arrival Date -->
                     <div>
                         <label for="coupon_arrival_date" class="block text-sm font-medium text-gray-700 mb-2">تاريخ وصول القسيمة</label>
@@ -429,6 +438,17 @@
                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                placeholder="أدخل اسم قريب العميل">
                         @error('client_relative_name')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Client Receiver Name (conditional) -->
+                    <div id="client_receiver_field" style="display: none;">
+                        <label for="client_receiver_name" class="block text-sm font-medium text-gray-700 mb-2">ادخل اسم العميل المستلم</label>
+                        <input type="text" name="client_receiver_name" id="client_receiver_name" value="{{ old('client_receiver_name') }}"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                               placeholder="أدخل اسم المستلم">
+                        @error('client_receiver_name')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
                     </div>
@@ -647,6 +667,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const documentReceiver = document.getElementById('document_receiver');
   const deliveryManField = document.getElementById('delivery_man_field');
   const clientRelativeField = document.getElementById('client_relative_field');
+  const clientReceiverField = document.getElementById('client_receiver_field');
 
   function toggleConditionalFields() {
     const value = documentReceiver.value;
@@ -654,12 +675,15 @@ document.addEventListener('DOMContentLoaded', function() {
     // Hide all conditional fields
     deliveryManField.style.display = 'none';
     clientRelativeField.style.display = 'none';
+    clientReceiverField.style.display = 'none';
     
     // Show relevant field based on selection
     if (value === 'delivery') {
       deliveryManField.style.display = 'block';
     } else if (value === 'client_relative') {
       clientRelativeField.style.display = 'block';
+    } else if (value === 'client') {
+      clientReceiverField.style.display = 'block';
     }
   }
 
