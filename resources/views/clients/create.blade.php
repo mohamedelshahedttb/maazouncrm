@@ -171,7 +171,7 @@
                         <select name="accessories[]" id="accessories" multiple
                                 class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                             @foreach($products as $product)
-                                <option value="{{ $product->id }}" {{ in_array($product->id, old('accessories', [])) ? 'selected' : '' }}>
+                                <option value="{{ $product->id }}" data-price="{{ $product->selling_price }}" {{ in_array($product->id, old('accessories', [])) ? 'selected' : '' }}>
                                     {{ $product->name }} - {{ number_format($product->selling_price, 2) }} {{ $product->currency }}
                                 </option>
                             @endforeach
@@ -570,31 +570,33 @@ function calculateFinalPrice() {
   const calculatedPriceEl = document.getElementById('calculated_price');
   const discountTypeEl = document.getElementById('discount_type');
   const discountValueEl = document.getElementById('discount_value');
+  const accessoriesEl = document.getElementById('accessories');
   const finalPriceEl = document.getElementById('final_price');
   const finalPriceDisplayEl = document.getElementById('final_price_display');
   
-  if (!calculatedPriceEl || !calculatedPriceEl.value) {
-    finalPriceEl.value = '';
-    finalPriceDisplayEl.textContent = '0.00 جنيه';
-    return;
+  const basePrice = parseNumber(calculatedPriceEl.value) || 0;
+
+  let accessoriesTotal = 0;
+  if (accessoriesEl) {
+    for (const option of accessoriesEl.selectedOptions) {
+      const price = parseNumber(option.dataset.price);
+      if (price) {
+        accessoriesTotal += price;
+      }
+    }
   }
+
+  const priceAfterAccessories = basePrice + accessoriesTotal;
   
-  const basePrice = parseNumber(calculatedPriceEl.value);
-  if (!basePrice) {
-    finalPriceEl.value = '';
-    finalPriceDisplayEl.textContent = '0.00 جنيه';
-    return;
-  }
-  
-  let finalPrice = basePrice;
+  let finalPrice = priceAfterAccessories;
   
   if (discountTypeEl && discountTypeEl.value && discountValueEl && discountValueEl.value) {
     const discountValue = parseNumber(discountValueEl.value);
     if (discountValue) {
       if (discountTypeEl.value === 'percentage') {
-        finalPrice = basePrice - (basePrice * discountValue / 100);
+        finalPrice = priceAfterAccessories - (priceAfterAccessories * discountValue / 100);
       } else if (discountTypeEl.value === 'fixed_amount') {
-        finalPrice = basePrice - discountValue;
+        finalPrice = priceAfterAccessories - discountValue;
       }
     }
   }
@@ -686,5 +688,6 @@ document.getElementById('governorate_id')?.addEventListener('change', function()
 document.getElementById('service_id')?.addEventListener('change', recalcPrice);
 document.getElementById('discount_type')?.addEventListener('change', calculateFinalPrice);
 document.getElementById('discount_value')?.addEventListener('input', calculateFinalPrice);
+document.getElementById('accessories')?.addEventListener('change', calculateFinalPrice);
 </script>
 @endsection

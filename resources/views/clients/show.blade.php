@@ -146,7 +146,7 @@
                 <div class="info-item col-span-1 md:col-span-3">
                     <label>اكسسوارات العقد</label>
                     <p>
-                        @forelse($client->accessories as $productId)
+                        @forelse($client->accessories ?? [] as $productId)
                             @php
                                 $product = \App\Models\Product::find($productId);
                             @endphp

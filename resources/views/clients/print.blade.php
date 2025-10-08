@@ -121,7 +121,7 @@
                 <div class="grid-item"><span class="label">مبلغ المؤخر</span><span class="value">{{ number_format((float)($client->mahr ?? 0), 2) }}</span></div>
                 <div class="grid-item"><span class="label">الخصم</span><span class="value">@if($client->discount_value){{ $client->discount_value }} {{ $client->discount_type == 'percentage' ? '%' : 'جنيه' }}@else - @endif</span></div>
                 <div class="grid-item"><span class="label">السعر النهائي</span><span class="value">{{ number_format($client->final_price, 2) ?? '0.00' }} جنيه</span></div>
-                <div class="grid-item full-width"><span class="label">اكسسوارات العقد</span><span class="value">@forelse($client->accessories as $productId) @php $product = \App\Models\Product::find($productId); @endphp @if($product){{ $product->name }}@if(!$loop->last), @endif @endif @empty - @endforelse</span></div>
+                <div class="grid-item full-width"><span class="label">اكسسوارات العقد</span><span class="value">@forelse($client->accessories ?? [] as $productId) @php $product = \App\Models\Product::find($productId); @endphp @if($product){{ $product->name }}@if(!$loop->last), @endif @endif @empty - @endforelse</span></div>
             </div>
         </div>
 
