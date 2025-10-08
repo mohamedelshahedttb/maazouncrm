@@ -84,6 +84,27 @@
                         @enderror
                     </div>
 
+                    <!-- Governorate Selection for Pricing -->
+                    <div>
+                        <label for="governorate_id" class="block text-sm font-medium text-gray-700 mb-2">المحافظة (طريقة تسعير خاصة)</label>
+                        @php
+                          $governorates = \Illuminate\Support\Facades\Schema::hasTable('governorates')
+                            ? \App\Models\Governorate::where('is_active', true)->orderBy('name')->get()
+                            : collect();
+                        @endphp
+                        <select name="governorate_id" id="governorate_id" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            <option value="">اختر المحافظة</option>
+                            @foreach($governorates as $gov)
+                                <option value="{{ $gov->id }}" {{ old('governorate_id') == $gov->id ? 'selected' : '' }}>
+                                    {{ $gov->name }} - ثابت: {{ number_format($gov->base_fixed_fee, 2) }} + إضافي: {{ number_format($gov->added_fees, 2) }} @if($gov->mahr_percentage) | نسبة مؤخر: {{ rtrim(rtrim(number_format($gov->mahr_percentage, 2), '0'), '.') }}%@endif
+                                </option>
+                            @endforeach
+                        </select>
+                        @if(!\Illuminate\Support\Facades\Schema::hasTable('governorates'))
+                          <p class="text-xs text-gray-500 mt-1">سيظهر الاختيار هنا بعد تشغيل الترحيلات.</p>
+                        @endif
+                    </div>
+
                     <!-- Area Selection for Pricing -->
                     <div>
                         <label for="area_id" class="block text-sm font-medium text-gray-700 mb-2">المنطقة (لحساب السعر)</label>
@@ -515,16 +536,18 @@ function parseNumber(value) {
 async function recalcPrice() {
   const serviceIdEl = document.getElementById('service_id');
   const areaIdEl = document.getElementById('area_id');
+  const governorateIdEl = document.getElementById('governorate_id');
   const mahrEl = document.getElementById('mahr');
   const priceEl = document.getElementById('calculated_price');
   if (!serviceIdEl) return;
   const serviceId = serviceIdEl.value ? parseInt(serviceIdEl.value) : null;
-  const areaId = areaIdEl && areaIdEl.value ? parseInt(areaIdEl.value) : null;
+  const governorateId = governorateIdEl && governorateIdEl.value ? parseInt(governorateIdEl.value) : null;
+  const areaId = (!governorateId && areaIdEl && areaIdEl.value) ? parseInt(areaIdEl.value) : null; // ignore area if governorate is selected
   const mahr = parseNumber(mahrEl && mahrEl.value ? mahrEl.value : null);
-  if (!serviceId) { 
-    priceEl.value = ''; 
+  if (!serviceId && !governorateId && !areaId) {
+    priceEl.value = '';
     calculateFinalPrice();
-    return; 
+    return;
   }
   try {
     const res = await fetch("{{ route('pricing.calculate') }}", {
@@ -533,7 +556,7 @@ async function recalcPrice() {
         'Content-Type': 'application/json',
         'X-CSRF-TOKEN': document.querySelector('input[name=_token]').value
       },
-      body: JSON.stringify({ service_id: serviceId, area_id: areaId, mahr: mahr })
+      body: JSON.stringify({ service_id: serviceId, area_id: areaId, governorate_id: governorateId, mahr: mahr })
     });
     const data = await res.json();
     if (data && typeof data.price !== 'undefined') {
@@ -648,6 +671,18 @@ document.addEventListener('DOMContentLoaded', function() {
 document.getElementById('recalculate_price')?.addEventListener('click', recalcPrice);
 document.getElementById('area_id')?.addEventListener('change', recalcPrice);
 document.getElementById('mahr')?.addEventListener('input', recalcPrice);
+document.getElementById('governorate_id')?.addEventListener('change', function() {
+  // Disable area when governorate selected, enable otherwise
+  const govSelected = !!this.value;
+  const areaSelect = document.getElementById('area_id');
+  if (areaSelect) {
+    areaSelect.disabled = govSelected;
+    if (govSelected) {
+      areaSelect.value = '';
+    }
+  }
+  recalcPrice();
+});
 document.getElementById('service_id')?.addEventListener('change', recalcPrice);
 document.getElementById('discount_type')?.addEventListener('change', calculateFinalPrice);
 document.getElementById('discount_value')?.addEventListener('input', calculateFinalPrice);

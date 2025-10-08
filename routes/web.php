@@ -20,6 +20,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ClientSourceController;
 use App\Http\Controllers\IntegrationController;
 use App\Http\Controllers\WebhookController;
+use App\Http\Controllers\GovernorateController;
 use Illuminate\Http\Request;
 use App\Services\PricingService;
 use App\Models\Area;
@@ -36,19 +37,29 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Areas CRUD
     Route::resource('areas', AreaController::class)->except(['show']);
 
+    // Governorates CRUD
+    Route::resource('governorates', GovernorateController::class)->except(['show']);
+
     // Pricing calculation endpoint
     Route::post('/pricing/calculate', function (Request $request, PricingService $pricing) {
         $validated = $request->validate([
-            'service_id' => 'required|exists:services,id',
+            'service_id' => 'nullable|exists:services,id', // optional when governorate is present
             'area_id' => 'nullable|exists:areas,id',
+            'governorate_id' => 'nullable|exists:governorates,id',
             'mahr' => 'nullable|numeric|min:0',
         ]);
-        $price = $pricing->calculate((int)$validated['service_id'], isset($validated['area_id']) ? (int)$validated['area_id'] : null, isset($validated['mahr']) ? (float)$validated['mahr'] : null);
+        $price = $pricing->calculate(
+            (int) $validated['service_id'],
+            isset($validated['area_id']) ? (int)$validated['area_id'] : null,
+            isset($validated['mahr']) ? (float)$validated['mahr'] : null,
+            isset($validated['governorate_id']) ? (int)$validated['governorate_id'] : null
+        );
         return response()->json(['price' => $price]);
     })->name('pricing.calculate');
 
     // Clients Management
     Route::resource('clients', ClientController::class);
+    Route::get('clients/{client}/print', [ClientController::class, 'print'])->name('clients.print');
     Route::get('clients/{client}/conversations', [ClientController::class, 'conversations'])->name('clients.conversations');
     Route::get('clients/{client}/orders', [ClientController::class, 'orders'])->name('clients.orders');
     Route::get('clients-kanban', [ClientController::class, 'kanban'])->name('clients.kanban');

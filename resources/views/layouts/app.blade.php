@@ -69,6 +69,13 @@
                             <span class="font-medium">إدارة المناطق</span>
                         </a>
 
+                        <a href="{{ route('governorates.index') }}" class="flex items-center px-4 py-3.5 text-gray-700 rounded-xl hover:bg-blue-50 hover:text-blue-700 transition-all duration-200 mt-2 {{ request()->routeIs('governorates.*') ? 'bg-blue-50 text-blue-700 border-r-4 border-blue-500 shadow-sm' : '' }}">
+                            <svg class="w-5 h-5 mr-3 {{ request()->routeIs('governorates.*') ? 'text-blue-600' : 'text-gray-500' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 4a6 6 0 100 12 6 6 0 000-12z"></path>
+                            </svg>
+                            <span class="font-medium">إدارة المحافظات</span>
+                        </a>
+
                         <a href="{{ route('users.index') }}" class="flex items-center px-4 py-3.5 text-gray-700 rounded-xl hover:bg-blue-50 hover:text-blue-700 transition-all duration-200 mt-2 {{ request()->routeIs('users.*') ? 'bg-blue-50 text-blue-700 border-r-4 border-blue-500 shadow-sm' : '' }}">
                             <svg class="w-5 h-5 mr-3 {{ request()->routeIs('users.*') ? 'text-blue-600' : 'text-gray-500' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>

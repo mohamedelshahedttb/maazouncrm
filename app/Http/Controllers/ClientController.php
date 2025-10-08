@@ -85,13 +85,13 @@ class ClientController extends Controller
             'delivery_man_name' => 'nullable|string|max:255',
             'client_relative_name' => 'nullable|string|max:255',
             'google_maps_link' => 'nullable|url|max:500',
-            'governorate' => 'nullable|string|max:255',
-            'area' => 'nullable|string|max:255',
             'notes' => 'nullable|string|max:1000',
             'whatsapp_number' => 'nullable|string|max:20',
             'is_active' => 'boolean',
             'service_id' => 'nullable|exists:services,id',
             'source_id' => 'nullable|exists:client_sources,id',
+            'area_id' => 'nullable|exists:areas,id',
+            'governorate_id' => 'nullable|exists:governorates,id',
             'client_status' => 'nullable|in:new,in_progress,completed,cancelled',
         ]);
 
@@ -123,7 +123,11 @@ class ClientController extends Controller
 
     public function show(Client $client)
     {
-        $client->load(['appointments', 'orders', 'conversations', 'media']);
+        $client->load(['appointments', 'orders', 'conversations', 'media', 'governorate', 'area', 'service', 'source']);
+        $accessoryProducts = collect();
+        if (is_array($client->accessories) && !empty($client->accessories)) {
+            $accessoryProducts = \App\Models\Product::whereIn('id', $client->accessories)->get();
+        }
         
         $recentAppointments = $client->appointments()
             ->orderBy('appointment_date', 'desc')
@@ -135,7 +139,17 @@ class ClientController extends Controller
             ->take(5)
             ->get();
 
-        return view('clients.show', compact('client', 'recentAppointments', 'recentOrders'));
+        return view('clients.show', compact('client', 'recentAppointments', 'recentOrders', 'accessoryProducts'));
+    }
+
+    public function print(Client $client)
+    {
+        $client->load(['appointments', 'orders', 'conversations', 'media', 'governorate', 'area', 'service', 'source']);
+        $accessoryProducts = collect();
+        if (is_array($client->accessories) && !empty($client->accessories)) {
+            $accessoryProducts = \App\Models\Product::whereIn('id', $client->accessories)->get();
+        }
+        return view('clients.print', compact('client', 'accessoryProducts'));
     }
 
     public function edit(Client $client)
@@ -185,13 +199,13 @@ class ClientController extends Controller
             'delivery_man_name' => 'nullable|string|max:255',
             'client_relative_name' => 'nullable|string|max:255',
             'google_maps_link' => 'nullable|url|max:500',
-            'governorate' => 'nullable|string|max:255',
-            'area' => 'nullable|string|max:255',
             'notes' => 'nullable|string|max:1000',
             'whatsapp_number' => 'nullable|string|max:20',
             'is_active' => 'boolean',
             'service_id' => 'nullable|exists:services,id',
             'source_id' => 'nullable|exists:client_sources,id',
+            'area_id' => 'nullable|exists:areas,id',
+            'governorate_id' => 'nullable|exists:governorates,id',
             'client_status' => 'nullable|in:new,in_progress,completed,cancelled',
         ]);
 

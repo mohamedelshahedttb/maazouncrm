@@ -69,6 +69,8 @@ class Client extends Model implements HasMedia
         'is_active',
         'service_id',
         'source_id',
+        'governorate_id',
+        'area_id',
         'client_status',
     ];
 
@@ -125,6 +127,16 @@ class Client extends Model implements HasMedia
         return $this->belongsTo(ClientSource::class, 'source_id');
     }
 
+    public function governorate(): BelongsTo
+    {
+        return $this->belongsTo(Governorate::class);
+    }
+
+    public function area(): BelongsTo
+    {
+        return $this->belongsTo(Area::class);
+    }
+
     public function appointments(): HasMany
     {
         return $this->hasMany(Appointment::class);
@@ -162,6 +174,27 @@ class Client extends Model implements HasMedia
     }
 
     // Methods
+    public function getClientStatusLabelAttribute(): string
+    {
+        return match($this->client_status) {
+            self::STATUS_NEW => 'جديد',
+            self::STATUS_IN_PROGRESS => 'جاري العمل عليه',
+            self::STATUS_COMPLETED => 'مكتمل',
+            self::STATUS_CANCELLED => 'ملغي',
+            default => 'غير محدد'
+        };
+    }
+    
+    public function getDocumentReceiverLabelAttribute(): string
+    {
+        return match($this->document_receiver) {
+            'delivery' => 'دليفري',
+            'client' => 'العميل',
+            'client_relative' => 'أحد أقارب العميل',
+            default => '-'
+        };
+    }
+
     public function getStatusLabelAttribute(): string
     {
         return match($this->status) {

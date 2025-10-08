@@ -4,16 +4,26 @@ namespace App\Services;
 
 use App\Models\Area;
 use App\Models\Service;
+use App\Models\Governorate;
 
 class PricingService
 {
-    public function calculate(int $serviceId, ?int $areaId, ?float $mahr): float
+    public function calculate(?int $serviceId, ?int $areaId, ?float $mahr, ?int $governorateId = null): float
     {
-        $service = Service::findOrFail($serviceId);
         $total = 0.0;
 
-        // Transportation fee + mahr percentage
-        if ($areaId) {
+        // Governorate-based pricing (if provided): base_fixed_fee + added_fees + mahr percentage (if set)
+        if ($governorateId) {
+            $gov = Governorate::findOrFail($governorateId);
+            $total += (float)$gov->base_fixed_fee;
+            $total += (float)$gov->added_fees;
+            if ($mahr !== null && $gov->mahr_percentage !== null) {
+                $total += ($mahr * ((float)$gov->mahr_percentage / 100.0));
+            }
+        }
+
+        // Area-based pricing (ignored when governorate is selected)
+        if ($areaId && !$governorateId) {
             $area = Area::findOrFail($areaId);
             $total += (float)$area->transportation_fee;
             if ($mahr !== null && $area->mahr_percentage !== null) {
@@ -21,8 +31,9 @@ class PricingService
             }
         }
 
-        // Fixed fee by mahr range
-        if ($mahr !== null) {
+        // Fixed fee by mahr range (only when a service is provided)
+        if ($serviceId && $mahr !== null) {
+            $service = Service::findOrFail($serviceId);
             $policy = $service->ratePolicies()
                 ->where('is_active', true)
                 ->where(function ($q) use ($mahr) {
