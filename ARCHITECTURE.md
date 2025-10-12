@@ -85,3 +85,4 @@ MaazounCRM is a Laravel 12 application with Livewire 3 and Volt used for auth vi
 ## Notes & Gaps
 - Some TODOs: sending real emails/WhatsApp in `InvoiceController@send`, PDF generation for invoices, mapping FB page IDs to clients.
 - Webhook processing is basic; production should validate payloads and idempotency.
+

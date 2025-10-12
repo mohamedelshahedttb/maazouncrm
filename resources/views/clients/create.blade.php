@@ -562,7 +562,7 @@ async function recalcPrice() {
   if (!serviceIdEl) return;
   const serviceId = serviceIdEl.value ? parseInt(serviceIdEl.value) : null;
   const governorateId = governorateIdEl && governorateIdEl.value ? parseInt(governorateIdEl.value) : null;
-  const areaId = (!governorateId && areaIdEl && areaIdEl.value) ? parseInt(areaIdEl.value) : null; // ignore area if governorate is selected
+  const areaId = areaIdEl && areaIdEl.value ? parseInt(areaIdEl.value) : null;
   const mahr = parseNumber(mahrEl && mahrEl.value ? mahrEl.value : null);
   if (!serviceId && !governorateId && !areaId) {
     priceEl.value = '';
@@ -697,18 +697,7 @@ document.addEventListener('DOMContentLoaded', function() {
 document.getElementById('recalculate_price')?.addEventListener('click', recalcPrice);
 document.getElementById('area_id')?.addEventListener('change', recalcPrice);
 document.getElementById('mahr')?.addEventListener('input', recalcPrice);
-document.getElementById('governorate_id')?.addEventListener('change', function() {
-  // Disable area when governorate selected, enable otherwise
-  const govSelected = !!this.value;
-  const areaSelect = document.getElementById('area_id');
-  if (areaSelect) {
-    areaSelect.disabled = govSelected;
-    if (govSelected) {
-      areaSelect.value = '';
-    }
-  }
-  recalcPrice();
-});
+document.getElementById('governorate_id')?.addEventListener('change', recalcPrice);
 document.getElementById('service_id')?.addEventListener('change', recalcPrice);
 document.getElementById('discount_type')?.addEventListener('change', calculateFinalPrice);
 document.getElementById('discount_value')?.addEventListener('input', calculateFinalPrice);
