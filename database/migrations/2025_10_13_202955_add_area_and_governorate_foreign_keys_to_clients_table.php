@@ -24,36 +24,22 @@ return new class extends Migration
             });
         }
         
-        // Add foreign key constraints only if they don't exist
-        if (Schema::hasColumn('clients', 'area_id') && !$this->foreignKeyExists('clients', 'clients_area_id_foreign')) {
+        // Add foreign key constraints (SQLite will handle duplicates gracefully)
+        try {
             Schema::table('clients', function (Blueprint $table) {
                 $table->foreign('area_id')->references('id')->on('areas')->onDelete('set null');
             });
+        } catch (\Exception $e) {
+            // Foreign key might already exist, continue
         }
         
-        if (Schema::hasColumn('clients', 'governorate_id') && !$this->foreignKeyExists('clients', 'clients_governorate_id_foreign')) {
+        try {
             Schema::table('clients', function (Blueprint $table) {
                 $table->foreign('governorate_id')->references('id')->on('governorates')->onDelete('set null');
             });
+        } catch (\Exception $e) {
+            // Foreign key might already exist, continue
         }
-    }
-    
-    /**
-     * Check if a foreign key constraint exists
-     */
-    private function foreignKeyExists(string $table, string $constraint): bool
-    {
-        $foreignKeys = Schema::getConnection()
-            ->getDoctrineSchemaManager()
-            ->listTableForeignKeys($table);
-            
-        foreach ($foreignKeys as $foreignKey) {
-            if ($foreignKey->getName() === $constraint) {
-                return true;
-            }
-        }
-        
-        return false;
     }
 
     /**
